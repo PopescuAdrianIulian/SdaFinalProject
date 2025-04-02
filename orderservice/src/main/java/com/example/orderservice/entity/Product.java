@@ -5,6 +5,7 @@ import com.example.orderservice.enums.PackageStatus;
 import com.example.orderservice.enums.Size;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -15,7 +16,8 @@ import java.util.Map;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "products")
+@Table(name = "product")
+@Builder
 public class Product {
 
     @Id

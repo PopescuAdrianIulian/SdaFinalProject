@@ -36,7 +36,7 @@ public class UserController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody AuthRequest authRequest) {
-        User user = userRepository.getByEmail(authRequest.getEmail());
+        User user = userRepository.getUserByEmail(authRequest.getEmail());
         if (user == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid Username");
         }
@@ -59,7 +59,7 @@ public class UserController {
 
     @PostMapping("/update/password")
     public ResponseEntity<?> updatePassword(@RequestBody AuthRequest authRequest) {
-        User tempUser = userRepository.getByEmail(authRequest.getEmail());
+        User tempUser = userRepository.getUserByEmail(authRequest.getEmail());
         tempUser.setPassword(hash.hashPassword(authRequest.getPassword()));
         userRepository.saveAndFlush(tempUser);
 
@@ -68,7 +68,7 @@ public class UserController {
 
     @PostMapping("/update/accountDetails")
     public ResponseEntity<?> updateAccount(@RequestBody AccountRequest accountRequest) {
-        User tempUser = userRepository.getByEmail(accountRequest.getEmail());
+        User tempUser = userRepository.getUserByEmail(accountRequest.getEmail());
         tempUser.setName(accountRequest.getName());
         tempUser.setEmail(accountRequest.getEmail());
         tempUser.setPhone(accountRequest.getPhone());
