@@ -2,6 +2,7 @@ package com.example.orderservice.config;
 
 import com.example.orderservice.enums.PackageStatus;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
@@ -9,7 +10,7 @@ import jakarta.persistence.Converter;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Map;
-
+import java.util.stream.Collectors;
 
 @Converter(autoApply = true)
 public class MapJsonConverter implements AttributeConverter<Map<LocalDateTime, PackageStatus>, String> {
@@ -27,7 +28,12 @@ public class MapJsonConverter implements AttributeConverter<Map<LocalDateTime, P
     @Override
     public Map<LocalDateTime, PackageStatus> convertToEntityAttribute(String dbData) {
         try {
-            return objectMapper.readValue(dbData, Map.class);
+            Map<String, String> tempMap = objectMapper.readValue(dbData, new TypeReference<Map<String, String>>() {});
+            return tempMap.entrySet().stream()
+                    .collect(Collectors.toMap(
+                            entry -> LocalDateTime.parse(entry.getKey()),
+                            entry -> PackageStatus.valueOf(entry.getValue())
+                    ));
         } catch (IOException e) {
             throw new RuntimeException("Failed to convert JSON to map", e);
         }

@@ -9,7 +9,6 @@ import io.jsonwebtoken.security.Keys;
 import org.springframework.stereotype.Service;
 
 import java.security.Key;
-import java.security.SignatureException;
 import java.util.Date;
 
 @Service
@@ -38,9 +37,9 @@ public class JwtService {
         Claims claims;
         try {
              claims = Jwts.parserBuilder()
-                    .setSigningKey(key) // Use the same key used for signing
+                    .setSigningKey(key)
                     .build()
-                    .parseClaimsJws(token) // This validates the signature
+                    .parseClaimsJws(token)
                     .getBody();
 
 

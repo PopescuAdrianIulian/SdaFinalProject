@@ -1,4 +1,4 @@
-package com.example.orderservice.dto;
+package com.example.orderservice.response;
 
 
 import com.example.orderservice.entity.Product;
@@ -13,10 +13,10 @@ import java.time.LocalDateTime;
 import java.util.Map;
 
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
 @Builder
-public class OrderResponse {
+@AllArgsConstructor
+@NoArgsConstructor
+public class ProductResponse {
 
     private Size size;
     private Double weight;
@@ -27,10 +27,11 @@ public class OrderResponse {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private boolean delivered;
+
     private Map<LocalDateTime, PackageStatus> statusHistory;
 
-    public OrderResponse createOrderResponse(Product product){
-       return OrderResponse.builder()
+    public ProductResponse createProductResponse(Product product){
+       return ProductResponse.builder()
                 .size(product.getSize())
                 .weight(product.getWeight())
                 .destinationAddress(product.getDestinationAddress())
