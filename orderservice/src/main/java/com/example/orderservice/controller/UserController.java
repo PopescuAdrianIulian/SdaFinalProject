@@ -1,5 +1,6 @@
 package com.example.orderservice.controller;
 
+import com.example.orderservice.dto.AccountRequest;
 import com.example.orderservice.dto.AuthRequest;
 import com.example.orderservice.dto.AuthResponse;
 import com.example.orderservice.entity.User;
@@ -33,26 +34,48 @@ public class UserController {
     @Autowired
     private PasswordHasher hash;
 
-@PostMapping("/login")
-public ResponseEntity<?> login(@RequestBody AuthRequest authRequest){
-    User user = userRepository.getByEmail(authRequest.getEmail());
-    if(user == null){
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid Username");
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody AuthRequest authRequest) {
+        User user = userRepository.getByEmail(authRequest.getEmail());
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid Username");
+        }
+        if (!hash.checkPassword(authRequest.getPassword(), user.getPassword())) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid Password");
+        }
+        String token = jwtService.generateToken(user);
+        return ResponseEntity.ok(new AuthResponse(token));
     }
-    if(!hash.checkPassword(authRequest.getPassword(), user.getPassword())){
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid Password");
+
+    @PostMapping("/create")
+    public ResponseEntity<?> createNewAccount(@RequestBody User user) {
+        if (!userRepository.existsByEmail(user.getEmail())) {
+            user.setPassword(hash.hashPassword(user.getPassword()));
+            userRepository.saveAndFlush(user);
+            return ResponseEntity.status(HttpStatus.CREATED).body("Created new " + user.getUserType());
+        }
+        return ResponseEntity.status(HttpStatus.CONFLICT).body("Email address already in use");
     }
-    String token = jwtService.generateToken(user);
-    return ResponseEntity.ok(new AuthResponse(token));
+
+    @PostMapping("/update/password")
+    public ResponseEntity<?> updatePassword(@RequestBody AuthRequest authRequest) {
+        User tempUser = userRepository.getByEmail(authRequest.getEmail());
+        tempUser.setPassword(hash.hashPassword(authRequest.getPassword()));
+        userRepository.saveAndFlush(tempUser);
+
+        return ResponseEntity.status(HttpStatus.OK).body("Password successfully changed.");
+    }
+
+    @PostMapping("/update/accountDetails")
+    public ResponseEntity<?> updateAccount(@RequestBody AccountRequest accountRequest) {
+        User tempUser = userRepository.getByEmail(accountRequest.getEmail());
+        tempUser.setName(accountRequest.getName());
+        tempUser.setEmail(accountRequest.getEmail());
+        tempUser.setPhone(accountRequest.getPhone());
+        tempUser.setAddress(accountRequest.getAddress());
+        userRepository.saveAndFlush(tempUser);
+        return ResponseEntity.status(HttpStatus.OK).body("Account details successfully changed.");
+    }
+
 }
 
-@PostMapping("/create")
-    public ResponseEntity<?> createNewAccount(@RequestBody User user){
-    if(!userRepository.existsByEmail(user.getEmail())){
-        user.setPassword(hash.hashPassword(user.getPassword()));
-        userRepository.save(user);
-        return ResponseEntity.status(HttpStatus.CREATED).body("Created new " + user.getUserType());
-    }
-    return ResponseEntity.status(HttpStatus.CONFLICT).body("Email address already in use");
-}
-}
