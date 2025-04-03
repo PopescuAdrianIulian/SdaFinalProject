@@ -1,7 +1,7 @@
 package com.example.orderservice.service;
 
-import com.example.orderservice.request.AccountRequest;
-import com.example.orderservice.request.AuthRequest;
+import com.example.orderservice.request.auth.AccountRequest;
+import com.example.orderservice.request.auth.AuthRequest;
 import com.example.orderservice.entity.User;
 import com.example.orderservice.repository.UserRepository;
 import com.example.orderservice.utils.PasswordHasher;

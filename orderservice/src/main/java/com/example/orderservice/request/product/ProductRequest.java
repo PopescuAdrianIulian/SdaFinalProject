@@ -1,10 +1,17 @@
-package com.example.orderservice.request;
+package com.example.orderservice.request.product;
 
 import com.example.orderservice.entity.Product;
 import com.example.orderservice.entity.User;
 import com.example.orderservice.enums.PackageStatus;
 import com.example.orderservice.enums.Size;
-import lombok.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -19,12 +26,26 @@ import static com.example.orderservice.service.ProductService.generateAWB;
 public class ProductRequest {
 
 
+    @NotNull(message = "Size cannot be null")
     private Size size;
+
+    @NotNull(message = "Weight cannot be null")
+    @Positive(message = "Weight must be a positive number")
     private Double weight;
+
+    @NotBlank(message = "Destination address cannot be empty")
     private String destinationAddress;
+
+    @NotBlank(message = "Destination contact cannot be empty")
     private String destinationContact;
+
+    @NotBlank(message = "Phone contact cannot be empty")
     private String destinationPhone;
+
     private boolean fragile;
+
+    @Email(message = "Invalid email format")
+    @NotBlank(message = "Email cannot be empty")
     private String email;
 
     public Product createNewProduct(User sender) {

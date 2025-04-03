@@ -1,31 +1,30 @@
 package com.example.orderservice.service;
 
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
-
-import org.springframework.stereotype.Service;
-
-import com.example.orderservice.response.ProductResponse;
 import com.example.orderservice.entity.Product;
 import com.example.orderservice.entity.User;
 import com.example.orderservice.enums.PackageStatus;
 import com.example.orderservice.repository.ProductRepository;
 import com.example.orderservice.repository.UserRepository;
-
+import com.example.orderservice.response.product.ProductResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
 
 @Service
 @Slf4j
 @RequiredArgsConstructor
 public class ProductService {
 
+    @Value("${AWB_PREFIX}")
+    private static String AWB_PREFIX;
     private final ProductRepository productRepository;
     private final UserRepository userRepository;
-    private static final String AWB_PREFIX = "RO";
-
 
     public void createProduct(Product product) {
         User sender = userRepository.getUserByEmail(product.getSender().getEmail());

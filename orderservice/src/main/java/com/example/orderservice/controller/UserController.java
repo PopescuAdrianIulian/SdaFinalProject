@@ -1,12 +1,13 @@
 package com.example.orderservice.controller;
 
-import com.example.orderservice.request.AccountRequest;
-import com.example.orderservice.request.AuthRequest;
-import com.example.orderservice.response.AuthResponse;
 import com.example.orderservice.entity.User;
+import com.example.orderservice.request.auth.AccountRequest;
+import com.example.orderservice.request.auth.AuthRequest;
+import com.example.orderservice.response.auth.AuthResponse;
 import com.example.orderservice.service.JwtService;
 import com.example.orderservice.service.UserService;
 import com.example.orderservice.utils.PasswordHasher;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,7 +26,7 @@ public class UserController {
     private final PasswordHasher encrypt;
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody AuthRequest authRequest) {
+    public ResponseEntity<?> login(@Valid @RequestBody AuthRequest authRequest) {
         User user = userService.getUserByEmail(authRequest.getEmail());
         if (user == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid Username");
@@ -38,17 +39,17 @@ public class UserController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<?> createNewAccount(@RequestBody User user) {
+    public ResponseEntity<?> createNewAccount(@Valid @RequestBody User user) {
         return ResponseEntity.ok(userService.createNewAccount(user));
     }
 
     @PostMapping("/update/password")
-    public ResponseEntity<?> updatePassword(@RequestBody AuthRequest authRequest) {
+    public ResponseEntity<?> updatePassword(@Valid @RequestBody AuthRequest authRequest) {
         return ResponseEntity.ok(userService.updatePassword(authRequest));
     }
 
     @PostMapping("/update/accountDetails")
-    public ResponseEntity<?> updateAccount(@RequestBody AccountRequest accountRequest) {
+    public ResponseEntity<?> updateAccount(@Valid @RequestBody AccountRequest accountRequest) {
         return ResponseEntity.ok(userService.updateAccount(accountRequest));
     }
 }

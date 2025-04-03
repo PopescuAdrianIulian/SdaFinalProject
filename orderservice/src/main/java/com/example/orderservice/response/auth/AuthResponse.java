@@ -1,4 +1,4 @@
-package com.example.orderservice.response;
+package com.example.orderservice.response.auth;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

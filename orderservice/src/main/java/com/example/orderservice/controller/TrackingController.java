@@ -1,9 +1,8 @@
 package com.example.orderservice.controller;
 
 import com.example.orderservice.enums.PackageStatus;
-import com.example.orderservice.response.ProductResponse;
+import com.example.orderservice.response.product.ProductResponse;
 import com.example.orderservice.service.TrackingService;
-import com.example.orderservice.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

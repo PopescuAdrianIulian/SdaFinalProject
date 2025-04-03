@@ -4,9 +4,10 @@ import com.example.orderservice.entity.Product;
 import com.example.orderservice.enums.PackageStatus;
 import com.example.orderservice.repository.ProductRepository;
 import com.example.orderservice.repository.UserRepository;
-import com.example.orderservice.response.ProductResponse;
+import com.example.orderservice.response.product.ProductResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +20,8 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class TrackingService {
 
+    @Value("${NOTIFICATION_TOPIC}")
+    private static String NOTIFICATION_TOPIC;
     private final UserRepository userRepository;
     private final ProductRepository productRepository;
     private final KafkaTemplate<String, ProductResponse> kafkaTemplate;
@@ -33,7 +36,7 @@ public class TrackingService {
         tempProduct.setUpdatedAt(LocalDateTime.now());
         productRepository.saveAndFlush(tempProduct);
         ProductResponse payload = new ProductResponse().createProductResponse(tempProduct);
-        kafkaTemplate.send("delivery-change", payload);
+        kafkaTemplate.send(NOTIFICATION_TOPIC, payload);
         log.info("Sending payload for the notification service {}", payload);
         return payload;
     }
@@ -45,13 +48,13 @@ public class TrackingService {
         tempProduct.setUpdatedAt(LocalDateTime.now());
         productRepository.saveAndFlush(tempProduct);
         ProductResponse payload = new ProductResponse().createProductResponse(tempProduct);
-        kafkaTemplate.send("delivery-change", payload);
+        kafkaTemplate.send(NOTIFICATION_TOPIC, payload);
         log.info("Sending payload for the notification service {}", payload);
         return payload;
     }
 
     public List<ProductResponse> getAllProducts() {
-       log.info("Retrieving all products");
+        log.info("Retrieving all products");
         return productRepository.findAll()
                 .stream()
                 .map(product -> new ProductResponse().createProductResponse(product))

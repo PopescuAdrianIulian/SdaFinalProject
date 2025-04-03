@@ -1,4 +1,4 @@
-package com.example.orderservice.response;
+package com.example.orderservice.response.product;
 
 
 import com.example.orderservice.entity.Product;
