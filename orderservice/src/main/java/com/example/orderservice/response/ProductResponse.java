@@ -27,11 +27,12 @@ public class ProductResponse {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private boolean delivered;
+    private String email;
 
     private Map<LocalDateTime, PackageStatus> statusHistory;
 
-    public ProductResponse createProductResponse(Product product){
-       return ProductResponse.builder()
+    public ProductResponse createProductResponse(Product product) {
+        return ProductResponse.builder()
                 .size(product.getSize())
                 .weight(product.getWeight())
                 .destinationAddress(product.getDestinationAddress())
@@ -41,6 +42,7 @@ public class ProductResponse {
                 .updatedAt(product.getUpdatedAt())
                 .delivered(product.isDelivered())
                 .statusHistory(product.getStatusHistory())
+                .email(product.getSender().getEmail())
                 .build();
     }
 }
