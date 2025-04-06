@@ -28,6 +28,7 @@ public class ProductResponse {
     private LocalDateTime updatedAt;
     private boolean delivered;
     private String email;
+    private double price;
 
     private Map<LocalDateTime, PackageStatus> statusHistory;
 
@@ -43,6 +44,7 @@ public class ProductResponse {
                 .delivered(product.isDelivered())
                 .statusHistory(product.getStatusHistory())
                 .email(product.getSender().getEmail())
+                .price(product.getPrice())
                 .build();
     }
 }

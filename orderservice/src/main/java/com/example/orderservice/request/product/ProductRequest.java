@@ -44,6 +44,8 @@ public class ProductRequest {
 
     private boolean fragile;
 
+    private double price;
+
     @Email(message = "Invalid email format")
     @NotBlank(message = "Email cannot be empty")
     private String email;

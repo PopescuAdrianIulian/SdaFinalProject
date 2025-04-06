@@ -59,6 +59,7 @@ public class Product {
     private PackageStatus status;
 
     private boolean delivered;
+    private double price;
 
     @Convert(converter = MapJsonConverter.class)
     @Column(columnDefinition = "JSON")

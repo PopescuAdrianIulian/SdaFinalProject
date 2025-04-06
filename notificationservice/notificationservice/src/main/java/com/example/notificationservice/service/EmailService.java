@@ -1,7 +1,7 @@
 package com.example.notificationservice.service;
 
 import com.example.notificationservice.enums.PackageStatus;
-import com.example.orderservice.response.ProductResponse;
+import com.example.orderservice.response.product.ProductResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -38,6 +38,8 @@ public class EmailService {
         sb.append(" - Size: ").append(payload.getSize()).append("\n");
         sb.append(" - Weight: ").append(payload.getWeight()).append(" kg\n");
         sb.append(" - Fragile: ").append(payload.isFragile() ? "Yes" : "No").append("\n\n");
+
+        sb.append(" - Delivery Price: ").append(String.format("%.2f", payload.getPrice())).append(" Ron\n\n");
 
         sb.append("Delivery Information:\n");
         sb.append(" - Destination Address: ").append(payload.getDestinationAddress()).append("\n");

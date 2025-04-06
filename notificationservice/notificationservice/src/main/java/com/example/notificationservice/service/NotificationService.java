@@ -1,6 +1,6 @@
 package com.example.notificationservice.service;
 
-import com.example.orderservice.response.ProductResponse;
+import com.example.orderservice.response.product.ProductResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -13,7 +13,7 @@ public class NotificationService {
 
     private final EmailService emailService;
 
-    @KafkaListener(topics = "delivery-change", groupId = "notification-service")
+    @KafkaListener(topics = "delivery-change", groupId = "tracking-alert")
     public void fetchData(ProductResponse productResponse) {
         log.info("Fetching data {}", productResponse);
 

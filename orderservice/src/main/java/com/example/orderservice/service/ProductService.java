@@ -5,10 +5,12 @@ import com.example.orderservice.entity.User;
 import com.example.orderservice.enums.PackageStatus;
 import com.example.orderservice.repository.ProductRepository;
 import com.example.orderservice.repository.UserRepository;
+import com.example.orderservice.request.product.ProductRequest;
 import com.example.orderservice.response.product.ProductResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -21,16 +23,21 @@ import java.util.Random;
 @RequiredArgsConstructor
 public class ProductService {
 
-    @Value("${AWB_PREFIX}")
-    private static String AWB_PREFIX;
+    @Value("${NOTIFICATION_TOPIC}")
+    private String NOTIFICATION_TOPIC;
+    private final KafkaTemplate<String, ProductResponse> kafkaTemplate;
     private final ProductRepository productRepository;
     private final UserRepository userRepository;
 
-    public void createProduct(Product product) {
-        User sender = userRepository.getUserByEmail(product.getSender().getEmail());
+
+    public void createProduct(ProductRequest productRequest) {
+        Map<LocalDateTime, PackageStatus> tempStatusHistory = new java.util.HashMap<>();
+        User sender = userRepository.getUserByEmail(productRequest.getEmail());
         if (sender == null) {
-            throw new RuntimeException("User not found for email: " + product.getSender().getEmail());
+            throw new RuntimeException("User not found for email: " + productRequest.getEmail());
         }
+
+        Product product = productRequest.createNewProduct(sender);
         product.setSender(sender);
         String awb = generateAWB();
         product.setAwb(awb);
@@ -38,19 +45,36 @@ public class ProductService {
         product.setStatus(PackageStatus.OPEN);
         product.setCreatedAt(LocalDateTime.now());
         product.setUpdatedAt(LocalDateTime.now());
-
-        Map<LocalDateTime, PackageStatus> tempStatusHistory = new java.util.HashMap<>();
+        product.setPrice(generatePrice(product));
         tempStatusHistory.put(LocalDateTime.now(), PackageStatus.OPEN);
         product.setStatusHistory(tempStatusHistory);
         productRepository.save(product);
+
+        ProductResponse payload = new ProductResponse().createProductResponse(product);
+        kafkaTemplate.send(NOTIFICATION_TOPIC, payload);
         log.info("Product created with AWB: {}", awb);
     }
 
 
     public static String generateAWB() {
         String randomDigits = String.format("%09d", new Random().nextInt(1000000000));
-        log.info("The awb was generated {}", AWB_PREFIX + randomDigits);
+        String AWB_PREFIX = "RO";
         return AWB_PREFIX + randomDigits;
+    }
+
+    public static Double generatePrice(Product product) {
+        double basePrice = 0;
+        switch (product.getSize()) {
+            case SMALL -> basePrice = 10;
+            case MEDIUM -> basePrice = 15;
+            case LARGE -> basePrice = 20;
+            case EXTRALARGE -> basePrice = 25;
+        }
+        basePrice += product.getWeight() * 2;
+        if (product.isFragile()) {
+            basePrice += 5;
+        }
+        return basePrice;
     }
 
 
@@ -60,11 +84,10 @@ public class ProductService {
             throw new RuntimeException("User not found for email: " + email);
         }
         ProductResponse productResponse = new ProductResponse();
-        List<ProductResponse> allProducts = tempUser.getProducts()
+        return tempUser.getProducts()
                 .stream()
                 .map(productResponse::createProductResponse)
                 .toList();
-        return allProducts;
     }
 
     public ProductResponse getProductStatusByAwb(String awb) {

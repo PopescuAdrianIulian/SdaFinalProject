@@ -3,7 +3,6 @@ package com.example.orderservice.service;
 import com.example.orderservice.entity.Product;
 import com.example.orderservice.enums.PackageStatus;
 import com.example.orderservice.repository.ProductRepository;
-import com.example.orderservice.repository.UserRepository;
 import com.example.orderservice.response.product.ProductResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,8 +20,7 @@ import java.util.Map;
 public class TrackingService {
 
     @Value("${NOTIFICATION_TOPIC}")
-    private static String NOTIFICATION_TOPIC;
-    private final UserRepository userRepository;
+    private String NOTIFICATION_TOPIC;
     private final ProductRepository productRepository;
     private final KafkaTemplate<String, ProductResponse> kafkaTemplate;
 
@@ -43,7 +41,12 @@ public class TrackingService {
 
     public ProductResponse setProductAsDelivered(String awb) {
         Product tempProduct = productRepository.findProductByAwb(awb).orElseThrow();
+        if (tempProduct.isDelivered()) {
+            throw new RuntimeException("Already delivered");
+        }
         log.info("Product is delivered {}", tempProduct.getAwb());
+        log.info("Product price is {}", tempProduct.getPrice());
+
         tempProduct.setDelivered(true);
         tempProduct.setUpdatedAt(LocalDateTime.now());
         productRepository.saveAndFlush(tempProduct);
@@ -52,6 +55,7 @@ public class TrackingService {
         log.info("Sending payload for the notification service {}", payload);
         return payload;
     }
+
 
     public List<ProductResponse> getAllProducts() {
         log.info("Retrieving all products");

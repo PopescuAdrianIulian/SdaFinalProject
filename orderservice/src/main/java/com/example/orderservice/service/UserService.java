@@ -1,9 +1,10 @@
 package com.example.orderservice.service;
 
-import com.example.orderservice.request.auth.AccountRequest;
-import com.example.orderservice.request.auth.AuthRequest;
 import com.example.orderservice.entity.User;
 import com.example.orderservice.repository.UserRepository;
+import com.example.orderservice.request.auth.AccountRequest;
+import com.example.orderservice.request.auth.AuthRequest;
+import com.example.orderservice.response.auth.AuthResponse;
 import com.example.orderservice.utils.PasswordHasher;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,10 +17,23 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordHasher encrypt;
+    private final JwtService jwtService;
 
 
     public User getUserByEmail(String email) {
         return userRepository.getUserByEmail(email);
+    }
+
+    public AuthResponse login(AuthRequest authRequest) {
+        User user = getUserByEmail(authRequest.getEmail());
+        if (user == null) {
+            throw new RuntimeException("User not found");
+        }
+        if (!encrypt.checkPassword(authRequest.getPassword(), user.getPassword())) {
+            throw new RuntimeException("Invalid password");
+        }
+        String token = jwtService.generateToken(user);
+        return new AuthResponse(token);
     }
 
     public User createNewAccount(User user) {
