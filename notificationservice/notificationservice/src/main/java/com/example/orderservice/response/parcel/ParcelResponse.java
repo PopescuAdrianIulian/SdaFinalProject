@@ -1,4 +1,4 @@
-package com.example.orderservice.response.product;
+package com.example.orderservice.response.parcel;
 
 import com.example.notificationservice.enums.PackageStatus;
 import com.example.notificationservice.enums.Size;
@@ -14,7 +14,7 @@ import java.util.Map;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ProductResponse {
+public class ParcelResponse {
 
     private Size size;
     private Double weight;
@@ -26,6 +26,7 @@ public class ProductResponse {
     private LocalDateTime updatedAt;
     private boolean delivered;
     private String email;
+    private String awb;
     private double price;
 
     private Map<LocalDateTime, PackageStatus> statusHistory;

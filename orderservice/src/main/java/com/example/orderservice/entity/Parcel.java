@@ -20,9 +20,9 @@ import java.util.Map;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "product")
+@Table(name = "parcel")
 @Builder
-public class Product {
+public class Parcel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

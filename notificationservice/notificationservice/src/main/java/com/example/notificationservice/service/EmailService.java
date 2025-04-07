@@ -1,7 +1,7 @@
 package com.example.notificationservice.service;
 
 import com.example.notificationservice.enums.PackageStatus;
-import com.example.orderservice.response.product.ProductResponse;
+import com.example.orderservice.response.parcel.ParcelResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -29,7 +29,7 @@ public class EmailService {
         mailSender.send(message);
     }
 
-    public String createBody(ProductResponse payload) {
+    public String createBody(ParcelResponse payload) {
         StringBuilder sb = new StringBuilder();
 
         sb.append("We are pleased to provide you with an update on your package. Below are the details of your shipment:\n\n");
