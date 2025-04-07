@@ -1,19 +1,69 @@
+<form (ngSubmit)="onSubmit()" class="track-form">
+  <section class="hero-section">
+    <div class="hero-overlay">
+      <div class="hero-content">
+        <h1>Delivering Packages with Speed and Care</h1>
+        <p>Track your shipment anytime, anywhere.</p>
 
-
-<section class="hero-section">
-  <div class="hero-overlay">
-    <div class="hero-content">
-      <h1>Delivering Packages with Speed and Care</h1>
-      <p>Track your shipment anytime, anywhere.</p>
-
-      <div class="awb-form">
-        <input type="text" placeholder="Enter AWB Number" />
-        <button>Track</button>
+        <div class="awb-form">
+          <input
+            type="text"
+            placeholder="Enter AWB Number"
+            name="awb"
+            [(ngModel)]="enteredAWB"
+            required
+            aria-label="AWB Number"
+          />
+          <button type="submit">Track</button>
+        </div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
+</form>
 
+<div *ngIf="parcel as p" class="parcel-details fade-in">
+  <h2>📦 Parcel Summary</h2>
+
+  <div class="details-grid">
+    <div class="detail-box">
+      <span class="label">Size:</span>
+      <span class="value">{{ p.size }}</span>
+    </div>
+    <div class="detail-box">
+      <span class="label">Weight:</span>
+      <span class="value">{{ p.weight }}</span>
+    </div>
+    <div class="detail-box">
+      <span class="label">Destination:</span>
+      <span class="value">{{ p.destinationAddress }}</span>
+    </div>
+    <div class="detail-box">
+      <span class="label">Contact:</span>
+      <span class="value">{{ p.destinationContact }}</span>
+    </div>
+    <div class="detail-box">
+      <span class="label">Phone:</span>
+      <span class="value">{{ p.destinationPhone }}</span>
+    </div>
+    <div class="detail-box">
+      <span class="label">Email:</span>
+      <span class="value">{{ p.email }}</span>
+    </div>
+    <div class="detail-box">
+      <span class="label">Price:</span>
+      <span class="value">${{ p.price }}</span>
+    </div>
+  </div>
+
+  <div class="status-history">
+    <h3>Status History</h3>
+    <ul>
+      <li *ngFor="let status of (p.statusHistory | keyvalue)">
+        {{ status.key }}: {{ status.value }}
+      </li>
+    </ul>
+  </div>
+</div>
 
 <section class="info-section">
   <div class="info-container">
@@ -34,4 +84,3 @@
     </div>
   </div>
 </section>
-
