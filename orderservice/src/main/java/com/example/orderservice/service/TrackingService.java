@@ -1,9 +1,9 @@
 package com.example.orderservice.service;
 
-import com.example.orderservice.entity.Product;
+import com.example.orderservice.entity.Parcel;
 import com.example.orderservice.enums.PackageStatus;
-import com.example.orderservice.repository.ProductRepository;
-import com.example.orderservice.response.product.ProductResponse;
+import com.example.orderservice.repository.ParcelRepository;
+import com.example.orderservice.response.parcel.ParcelResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,47 +21,47 @@ public class TrackingService {
 
     @Value("${NOTIFICATION_TOPIC}")
     private String NOTIFICATION_TOPIC;
-    private final ProductRepository productRepository;
-    private final KafkaTemplate<String, ProductResponse> kafkaTemplate;
+    private final ParcelRepository parcelRepository;
+    private final KafkaTemplate<String, ParcelResponse> kafkaTemplate;
 
-    public ProductResponse changeDeliveryStatus(String awb, PackageStatus newStatus) {
-        Product tempProduct = productRepository.findProductByAwb(awb).orElseThrow();
+    public ParcelResponse changeDeliveryStatus(String awb, PackageStatus newStatus) {
+        Parcel tempParcel = parcelRepository.findParcelByAwb(awb).orElseThrow();
         log.info("Changing the status to {}", newStatus);
-        Map<LocalDateTime, PackageStatus> statusHistory = tempProduct.getStatusHistory();
+        Map<LocalDateTime, PackageStatus> statusHistory = tempParcel.getStatusHistory();
         statusHistory.put(LocalDateTime.now(), newStatus);
-        tempProduct.setStatusHistory(statusHistory);
-        tempProduct.setStatus(newStatus);
-        tempProduct.setUpdatedAt(LocalDateTime.now());
-        productRepository.saveAndFlush(tempProduct);
-        ProductResponse payload = new ProductResponse().createProductResponse(tempProduct);
+        tempParcel.setStatusHistory(statusHistory);
+        tempParcel.setStatus(newStatus);
+        tempParcel.setUpdatedAt(LocalDateTime.now());
+        parcelRepository.saveAndFlush(tempParcel);
+        ParcelResponse payload = new ParcelResponse().createParcelResponse(tempParcel);
         kafkaTemplate.send(NOTIFICATION_TOPIC, payload);
         log.info("Sending payload for the notification service {}", payload);
         return payload;
     }
 
-    public ProductResponse setProductAsDelivered(String awb) {
-        Product tempProduct = productRepository.findProductByAwb(awb).orElseThrow();
-        if (tempProduct.isDelivered()) {
+    public ParcelResponse setParcelAsDelivered(String awb) {
+        Parcel tempParcel = parcelRepository.findParcelByAwb(awb).orElseThrow();
+        if (tempParcel.isDelivered()) {
             throw new RuntimeException("Already delivered");
         }
-        log.info("Product is delivered {}", tempProduct.getAwb());
-        log.info("Product price is {}", tempProduct.getPrice());
+        log.info("Parcel is delivered {}", tempParcel.getAwb());
+        log.info("Parcel price is {}", tempParcel.getPrice());
 
-        tempProduct.setDelivered(true);
-        tempProduct.setUpdatedAt(LocalDateTime.now());
-        productRepository.saveAndFlush(tempProduct);
-        ProductResponse payload = new ProductResponse().createProductResponse(tempProduct);
+        tempParcel.setDelivered(true);
+        tempParcel.setUpdatedAt(LocalDateTime.now());
+        parcelRepository.saveAndFlush(tempParcel);
+        ParcelResponse payload = new ParcelResponse().createParcelResponse(tempParcel);
         kafkaTemplate.send(NOTIFICATION_TOPIC, payload);
         log.info("Sending payload for the notification service {}", payload);
         return payload;
     }
 
 
-    public List<ProductResponse> getAllProducts() {
-        log.info("Retrieving all products");
-        return productRepository.findAll()
+    public List<ParcelResponse> getAllParcels() {
+        log.info("Retrieving all Parcels");
+        return parcelRepository.findAll()
                 .stream()
-                .map(product -> new ProductResponse().createProductResponse(product))
+                .map(parcel -> new ParcelResponse().createParcelResponse(parcel))
                 .toList();
     }
 

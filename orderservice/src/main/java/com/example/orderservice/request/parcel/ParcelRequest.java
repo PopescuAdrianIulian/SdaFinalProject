@@ -1,6 +1,6 @@
-package com.example.orderservice.request.product;
+package com.example.orderservice.request.parcel;
 
-import com.example.orderservice.entity.Product;
+import com.example.orderservice.entity.Parcel;
 import com.example.orderservice.entity.User;
 import com.example.orderservice.enums.PackageStatus;
 import com.example.orderservice.enums.Size;
@@ -17,13 +17,13 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.example.orderservice.service.ProductService.generateAWB;
+import static com.example.orderservice.service.ParcelService.generateAWB;
 
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ProductRequest {
+public class ParcelRequest {
 
 
     @NotNull(message = "Size cannot be null")
@@ -50,11 +50,11 @@ public class ProductRequest {
     @NotBlank(message = "Email cannot be empty")
     private String email;
 
-    public Product createNewProduct(User sender) {
+    public Parcel createNewParcel(User sender) {
         Map<LocalDateTime, PackageStatus> statusHistory = new HashMap<>();
         statusHistory.put(LocalDateTime.now(), PackageStatus.OPEN);
 
-        return Product.builder()
+        return Parcel.builder()
                 .size(this.getSize())
                 .weight(this.getWeight())
                 .destinationAddress(this.getDestinationAddress())

@@ -46,7 +46,7 @@ public class User {
 
     @JsonManagedReference
     @OneToMany(mappedBy = "sender")
-    private List<Product> products = new ArrayList<>();
+    private List<Parcel> parcels = new ArrayList<>();
 
 
 }
