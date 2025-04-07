@@ -1,0 +1,26 @@
+.page-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden; /* prevent internal overflow */
+}
+
+
+app-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+router-outlet {
+  flex: 1;
+}
+
+
+

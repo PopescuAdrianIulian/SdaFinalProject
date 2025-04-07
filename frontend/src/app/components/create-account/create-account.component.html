@@ -1,0 +1,33 @@
+<div class="login-container">
+  <form>
+    <h2>Create Account</h2>
+    <br>
+
+    <div class="form-group">
+      <label for="username">Name</label>
+      <input type="text" id="username" name="username" required placeholder="Enter your name" />
+    </div>
+
+    <div class="form-group">
+      <label for="email">Email</label>
+      <input type="email" id="email" name="email" required placeholder="Enter your email"  />
+    </div>
+
+    <div class="form-group">
+      <label for="password">Password</label>
+      <input type="password" id="password" name="password" required placeholder="Create a password"  />
+    </div>
+
+    <div class="form-group">
+      <label for="confirmPassword">Confirm Password</label>
+      <input type="password" id="confirmPassword" name="confirmPassword" required placeholder="Repeat password"  />
+    </div>
+
+    <p class="errorMessage" *ngIf="errorMessage">{{ errorMessage }}</p>
+
+    <button type="submit">Create Account</button>
+    <br /><br />
+    <h4>Already have an account?</h4>
+    <button class="secondary-btn" (click)="goToLogin()">Go to Login</button>
+  </form>
+</div>
