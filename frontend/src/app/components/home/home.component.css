@@ -298,3 +298,9 @@ body, .container {
 .fade-in {
   animation: fadeIn 1s ease-in;
 }
+
+:host {
+  display: block;
+  height: 100%; /* This will now be 100% of the remaining viewport (after header) */
+  background: lightblue;
+}

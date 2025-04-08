@@ -1,33 +1,74 @@
-/* Fullscreen animated background container */
-.login-container {
-  width: 100vw;
-  height: 100vh;
-  position: absolute;
-  top: 0;
-  left: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: rgba(56, 59, 67, 0.8);
-  animation: backgroundCycle 50s infinite;
-  animation-timing-function: ease-in-out;
-  z-index: 2;
+:host {
+  display: block;
+  width: 100%;
+  min-height: 100%;
+  position: relative;
+  overflow: hidden;
   font-family: 'Segoe UI', sans-serif;
   color: white;
 }
 
-/* Form box styling */
-.login-container form {
+/* Page container */
+.create-account-page {
+  position: relative;
+  width: 100%;
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Background behind everything */
+.create-account-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  z-index: -1;
+  filter: brightness(0.75);
+  animation: backgroundCycle 50s infinite ease-in-out;
+  background: url('/assets/images/home1.png') no-repeat center center/cover;
+}
+
+/* Container for centering the form */
+.create-account-container {
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  padding: 2rem 1rem;
+  box-sizing: border-box;
+}
+
+/* Allow scroll on small screens */
+.create-account-container form {
   background: rgba(56, 59, 67, 0.85);
-  padding: 3rem 2.5rem;
+  padding: 2rem;
   border-radius: 12px;
-  width: 400px;
+  width: 100%;
+  max-width: 420px;
   text-align: center;
   box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.5);
   backdrop-filter: blur(10px);
+  box-sizing: border-box;
+  margin: auto 0; /* vertically centers if possible */
 }
 
-.login-container h2 {
+/* Handle cases where form is too tall */
+@media (max-height: 700px) {
+  .create-account-container {
+    align-items: flex-start;
+    overflow-y: auto;
+  }
+
+  .create-account-container form {
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+  }
+}
+
+h2 {
   margin-bottom: 2rem;
   font-size: 2rem;
 }
@@ -62,7 +103,6 @@ input:focus {
   background-color: rgba(255, 255, 255, 0.2);
 }
 
-/* Primary button */
 button {
   width: 100%;
   padding: 1.1rem;
@@ -81,17 +121,12 @@ button:hover {
   background-color: #e65c00;
 }
 
-/* Secondary button (e.g. "Go to Login") */
 .secondary-btn {
-  padding: 1rem;
-  margin-top: 1rem;
   background: transparent;
   border: 2px solid #ff6600;
   color: #ff6600;
-  border-radius: 8px;
-  font-size: 1.05rem;
-  font-weight: bold;
   transition: all 0.3s ease;
+  margin-top: 1rem;
 }
 
 .secondary-btn:hover {
@@ -99,9 +134,7 @@ button:hover {
   color: white;
 }
 
-
-/* Error message styling */
-.errorMessage {
+.error-message {
   color: #ff4b4b;
   font-size: 1rem;
   margin: 0.5rem 0;
@@ -126,21 +159,23 @@ button:hover {
   }
 }
 
-/* Background animation */
-@keyframes backgroundCycle {
-  0%, 5% {
-    background: url('/assets/images/home1.png') no-repeat center center/cover;
+/* Small screen adjustments */
+@media (max-width: 480px) {
+  .create-account-container form {
+    padding: 1.5rem 1rem;
   }
-  25%, 30% {
-    background: url('/assets/images/home2.png') no-repeat center center/cover;
+
+  h2 {
+    font-size: 1.5rem;
   }
-  50%, 55% {
-    background: url('/assets/images/home3.png') no-repeat center center/cover;
+
+  input {
+    padding: 0.9rem;
+    font-size: 1rem;
   }
-  75%, 80% {
-    background: url('/assets/images/home4.png') no-repeat center center/cover;
-  }
-  100% {
-    background: url('/assets/images/home1.png') no-repeat center center/cover;
+
+  button {
+    font-size: 1rem;
+    padding: 1rem;
   }
 }

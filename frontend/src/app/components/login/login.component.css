@@ -1,32 +1,59 @@
-.login-container {
-  width: 100vw;
-  height: 100vh;
-  position: absolute;
-  top: 0;
-  left: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: rgba(56, 59, 67, 0.8);
-  animation: backgroundCycle 50s infinite;
-  animation-timing-function: ease-in-out;
-  z-index: 2;
+/* Ensure the login page fills the viewport minus the header */
+:host {
+  display: block;
+  height: 100%;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
   font-family: 'Segoe UI', sans-serif;
   color: white;
 }
 
-/* Make the form visually larger and cleaner */
-.login-container form {
+/* Page wrapper */
+.login-page {
+  height: 100%;
+  width: 100%;
+  position: relative;
+}
+
+/* Fullscreen background cycling */
+.login-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  animation: backgroundCycle 50s infinite ease-in-out;
+  background: url('/assets/images/home1.png') no-repeat center center/cover;
+  z-index: 0;
+  filter: brightness(0.75);
+}
+
+/* Container that centers the login box */
+.login-container {
+  position: relative;
+  z-index: 1;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+  box-sizing: border-box;
+}
+
+/* The login form itself */
+form {
   background: rgba(56, 59, 67, 0.85);
-  padding: 3rem 2.5rem; /* larger padding */
+  padding: 3rem 2.5rem;
   border-radius: 12px;
-  width: 400px; /* increased width */
+  width: 100%;
+  max-width: 420px;
   text-align: center;
   box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.5);
   backdrop-filter: blur(10px);
 }
 
-.login-container h2 {
+h2 {
   margin-bottom: 2rem;
   font-size: 2rem;
 }
@@ -54,7 +81,6 @@ input::placeholder {
   color: #bcbcbc;
 }
 
-/* Button styles already updated before — just matches this size */
 button {
   width: 100%;
   padding: 1.1rem;
@@ -74,14 +100,9 @@ button:hover {
 }
 
 .secondary-btn {
-  padding: 1rem;
-  margin-top: 1rem;
   background: transparent;
   border: 2px solid #ff6600;
   color: #ff6600;
-  border-radius: 8px;
-  font-size: 1.05rem;
-  font-weight: bold;
   transition: all 0.3s ease;
 }
 
@@ -90,13 +111,13 @@ button:hover {
   color: white;
 }
 
-.errorMessage {
+.error-message {
   color: #ff4b4b;
   font-size: 1rem;
   margin: 0.5rem 0;
 }
 
-/* Background animation */
+/* Background animation keyframes */
 @keyframes backgroundCycle {
   0%, 5% {
     background: url('/assets/images/home1.png') no-repeat center center/cover;

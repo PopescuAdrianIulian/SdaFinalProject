@@ -1,26 +1,35 @@
-<div class="login-container">
-  <form>
-    <h2>Login</h2>
-    <br>
-    <div class="form-group">
-      <label for="username">Username</label>
-      <input type="text" id="username"  name="username" required placeholder="Enter username"/>
+<div class="login-page">
+  <div class="login-background"></div>
 
-    </div>
-    <div class="form-group">
-      <label for="password">Password</label>
-      <input  type="password" id="password" name="password" required placeholder="Enter password"/>
-    </div>
-    <p class="errorMessage" *ngIf="errorMessage">{{errorMessage}}</p>
-    <button type="submit">Login</button>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <h4>Don`t have an account?</h4>
-    <button (click)="goToCreateAccount()">Create an account</button>
-  </form>
-
+  <div class="login-container">
+    <form>
+      <h2>Login</h2>
+      <div class="form-group">
+        <label for="username">Username</label>
+        <input
+          type="text"
+          id="username"
+          name="username"
+          required
+          placeholder="Enter username"
+        />
+      </div>
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input
+          type="password"
+          id="password"
+          name="password"
+          required
+          placeholder="Enter password"
+        />
+      </div>
+      <p class="error-message" *ngIf="errorMessage">{{ errorMessage }}</p>
+      <button type="submit">Login</button>
+      <h4>Don’t have an account?</h4>
+      <button type="button" class="secondary-btn" (click)="goToCreateAccount()">
+        Create an account
+      </button>
+    </form>
+  </div>
 </div>
