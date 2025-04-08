@@ -2,7 +2,7 @@
   <div class="create-account-background"></div>
 
   <div class="create-account-container">
-    <form>
+    <form (ngSubmit)="onCreateAccount()" #form="ngForm">
       <h2>Create Account</h2>
 
       <div class="form-group">
@@ -10,7 +10,8 @@
         <input
           type="text"
           id="username"
-          name="username"
+          name="name"
+          [(ngModel)]="name"
           required
           placeholder="Enter your name"
         />
@@ -22,6 +23,7 @@
           type="email"
           id="email"
           name="email"
+          [(ngModel)]="email"
           required
           placeholder="Enter your email"
         />
@@ -33,6 +35,7 @@
           type="password"
           id="password"
           name="password"
+          [(ngModel)]="password"
           required
           placeholder="Create a password"
         />
@@ -44,6 +47,7 @@
           type="password"
           id="confirmPassword"
           name="confirmPassword"
+          [(ngModel)]="confirmPassword"
           required
           placeholder="Repeat password"
         />

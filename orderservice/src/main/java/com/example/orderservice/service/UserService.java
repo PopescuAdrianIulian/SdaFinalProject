@@ -1,6 +1,7 @@
 package com.example.orderservice.service;
 
 import com.example.orderservice.entity.User;
+import com.example.orderservice.enums.UserType;
 import com.example.orderservice.repository.UserRepository;
 import com.example.orderservice.request.auth.AccountRequest;
 import com.example.orderservice.request.auth.AuthRequest;
@@ -39,6 +40,7 @@ public class UserService {
     public User createNewAccount(User user) {
         if (!userRepository.existsByEmail(user.getEmail())) {
             user.setPassword(encrypt.hashPassword(user.getPassword()));
+            user.setUserType(UserType.USER);
             return userRepository.saveAndFlush(user);
         } else {
             throw new RuntimeException("Email is already used");
