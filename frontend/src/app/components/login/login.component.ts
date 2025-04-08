@@ -1,11 +1,9 @@
 import { Component } from '@angular/core';
-import { Router } from "@angular/router";
-import { HttpClient } from "@angular/common/http";
+import { Router } from '@angular/router';
 import { NgIf } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { UserService } from '@service/user.service';
 import { TokenDecoderService } from '@service/token.service';
-import { FormsModule } from '@angular/forms';
-
 
 @Component({
   selector: 'app-login',
@@ -17,62 +15,68 @@ import { FormsModule } from '@angular/forms';
 export class LoginComponent {
   email: string = '';
   password: string = '';
-   errorMessage: string ='';
+  errorMessage: string = '';
 
-     constructor(private service: UserService, private router: Router, private tokenDecoder: TokenDecoderService) {}
+  constructor(
+    private service: UserService,
+    private router: Router,
+    private tokenDecoder: TokenDecoderService
+  ) {}
 
-       goToCreateAccount(){
-         this.router.navigate(['/createAccount'])
-       }
+  goToCreateAccount(): void {
+    this.router.navigate(['/createAccount']);
+  }
 
-onLogin() {
-  const authRequest = {
-    email: this.email,
-    password: this.password
-  };
+  onLogin(): void {
+    const authRequest = {
+      email: this.email,
+      password: this.password
+    };
 
-  this.service.login(authRequest).subscribe({
-    next: (response) => {
-      const token = response.token;
+    this.service.login(authRequest).subscribe({
+      next: (response) => {
+        const token = response.token;
 
-      if (token) {
-        localStorage.setItem('jwt', token);
+        if (token) {
+          // Save token and decode
+          localStorage.setItem('jwt', token);
+          this.tokenDecoder.setUsernameFromToken(token);
 
-        // Use the decoder service
-        const payload = this.tokenDecoder.getPayload(token);
-        if (payload) {
-          console.log('JWT Payload:', payload);
-          console.log('Email (sub):', this.tokenDecoder.getUserEmail(token));
-          console.log('User Type:', this.tokenDecoder.getUserType(token));
-          console.log('Issued At:', new Date(payload.iat * 1000));
-          console.log('Expires At:', this.tokenDecoder.getTokenExpiration(token));
+          const payload = this.tokenDecoder.getPayload(token);
 
-          const userType = this.tokenDecoder.getUserType(token);
-          if (userType === 'ADMIN') {
-            this.router.navigate(['/admin/dashboard']);
+          if (payload) {
+            console.log('JWT Payload:', payload);
+            console.log('Email (sub):', payload.sub);
+            console.log('User Type:', payload.type);
+            console.log('Issued At:', new Date(payload.iat * 1000));
+            console.log('Expires At:', new Date(payload.exp * 1000));
+
+            // Redirect based on user type
+            switch (payload.type) {
+              case 'ADMIN':
+                this.router.navigate(['/admin/dashboard']);
+                break;
+              case 'USER':
+                this.router.navigate(['/sendParcel']);
+                break;
+              case 'COURIER':
+                this.router.navigate(['/courier/dashboard']);
+                break;
+              default:
+                this.router.navigate(['/home']);
+                break;
+            }
+          } else {
+            this.errorMessage = 'Failed to decode token.';
           }
-
-           if (userType === 'USER') {
-             this.router.navigate(['/sendParcel']);
-                   }
-           if (userType === 'COURIER') {
-             this.router.navigate(['/courier/dashboard']);
-                          }
         } else {
-          console.error('Token decoding failed.');
-          this.errorMessage = 'Failed to decode token.';
+          this.errorMessage = 'No token received';
         }
-      } else {
-        this.errorMessage = 'No token received';
+      },
+      error: (error) => {
+        console.error('Login failed:', error);
+        this.errorMessage = 'Invalid email or password.';
       }
-    },
-    error: (error) => {
-      console.error('Login failed:', error);
-      this.errorMessage = 'Invalid email or password.';
-    }
-  });
-}
-
-
-
+    });
+  }
 }

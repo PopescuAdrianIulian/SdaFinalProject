@@ -1,11 +1,15 @@
 <header class="header">
-  <div class="container">
-    <div class="logo">QuickShip</div>
-    <nav class="nav">
-      <button (click)="goToHome()">Home</button>
-      <button (click)="goToLogin()">Send Parcel</button>
-      <button (click)="goToLogin()">Deliver</button>
-      <button (click)="goToLogin()">System</button>
-    </nav>
+  <div class="header-section logo">QuickShip</div>
+
+  <nav class="header-section nav">
+    <button (click)="goToHome()">Home</button>
+    <button (click)="goToLogin()">Send Parcel</button>
+    <button (click)="goToLogin()">Deliver</button>
+    <button (click)="goToLogin()">System</button>
+  </nav>
+
+  <div class="header-section user-message-logout" *ngIf="isLoggedIn">
+    <p>Welcome, {{ username }}</p>
+    <button (click)="logout()">Logout</button>
   </div>
 </header>
