@@ -1,5 +1,5 @@
 export type Size = 'SMALL' | 'MEDIUM' | 'LARGE';
-export type PackageStatus = 'OPEN' | 'IN_TRANSIT' | 'DELIVERED' | 'CANCELLED';
+export type PackageStatus = 'OPEN' | 'IN_TRANSIT' | 'DELIVERED' | 'CANCELED';
 
 export interface ParcelRequest {
   size: Size;

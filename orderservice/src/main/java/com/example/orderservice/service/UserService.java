@@ -72,4 +72,14 @@ public class UserService {
         tempUser.setAddress(accountRequest.getAddress());
         return userRepository.saveAndFlush(tempUser);
     }
+
+    public Object createNewAccountCourier(User user) {
+        if (!userRepository.existsByEmail(user.getEmail())) {
+            user.setPassword(encrypt.hashPassword(user.getPassword()));
+            user.setUserType(UserType.COURIER);
+            return userRepository.saveAndFlush(user);
+        } else {
+            throw new RuntimeException("Email is already used");
+        }
+    }
 }

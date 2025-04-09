@@ -18,7 +18,7 @@ public class TrackingController {
 
     @PostMapping("/status/{awb}/{newStatus}")
     public ResponseEntity<ParcelResponse> changeDeliveryStatus(@PathVariable String awb,
-                                                               @PathVariable PackageStatus newStatus) {
+                                                               @PathVariable String newStatus) {
         return ResponseEntity.ok(trackingService.changeDeliveryStatus(awb, newStatus));
     }
 
@@ -30,6 +30,11 @@ public class TrackingController {
     @GetMapping("/parcels")
     public ResponseEntity<List<ParcelResponse>> getAllParcels() {
         return ResponseEntity.ok(trackingService.getAllParcels());
+    }
+
+    @GetMapping("/allParcels")
+    public ResponseEntity<List<ParcelResponse>> getAllUndeliveredParcels() {
+        return ResponseEntity.ok(trackingService.getAllUndeliveredParcels());
     }
 
 }

@@ -75,6 +75,7 @@ export class HeaderComponent implements OnInit {
   }
 
   goToDashboard() {
+    this.router.navigate(['/dashboard']);
   }
 
   goToProducts() {

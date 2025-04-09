@@ -31,4 +31,6 @@ public class ParcelController {
     public ResponseEntity<List<ParcelResponse>> getAllParcelsByUser(@Valid @PathVariable String email) {
         return ResponseEntity.ok(parcelService.getAllParcelsByUser(email));
     }
+
+
 }

@@ -1,0 +1,139 @@
+<div class="parcels-container">
+  <h1>My Parcels</h1>
+
+  <div *ngIf="loading" class="loading-indicator">
+    <div class="spinner"></div>
+    <p>Loading your parcels...</p>
+  </div>
+
+  <div *ngIf="error" class="error-message">
+    {{ error }}
+    <button (click)="loadParcels()">Try Again</button>
+  </div>
+
+  <div *ngIf="!loading && !error && parcels.length === 0" class="empty-state">
+    <p>You don't have any parcels yet.</p>
+    <button (click)="goToSendParcel()">Send a Parcel</button>
+  </div>
+
+  <div *ngIf="parcels.length > 0" class="parcels-list">
+
+    <div class="sort-options">
+      <label for="sortSelect">Sort by:</label>
+      <select id="sortSelect" [(ngModel)]="selectedSort" (change)="sortParcels()">
+        <option value="createdDesc">Newest First</option>
+        <option value="createdAsc">Oldest First</option>
+        <option value="updatedDesc">Last Updated</option>
+        <option value="updatedAsc">First Updated</option>
+      </select>
+    </div>
+
+    <div *ngFor="let parcel of parcels; let i = index" class="parcel-card">
+      <div class="parcel-summary" (click)="toggleParcelDetails(i)">
+        <div class="parcel-info">
+          <div class="parcel-awb">
+            <span class="label">AWB:</span>
+            <span class="value">{{ parcel.awb }}</span>
+          </div>
+          <div class="parcel-destination">
+            <span class="label">To:</span>
+            <span class="value">{{ parcel.destinationContact }}</span>
+          </div>
+          <div class="parcel-address">
+            <span class="label">Address:</span>
+            <span class="value">{{ parcel.destinationAddress }}</span>
+          </div>
+        </div>
+        <div class="parcel-status">
+          <span class="status-badge" [ngClass]="getStatusClass(getCurrentStatus(parcel.statusHistory))">
+            {{ getCurrentStatus(parcel.statusHistory) }}
+          </span>
+          <span class="expand-icon">{{ expandedParcelIndex === i ? '▲' : '▼' }}</span>
+        </div>
+      </div>
+
+      <!-- Dropdown for changing the status -->
+      <div class="change-status-select">
+        <label for="statusSelect-{{parcel.awb}}">Change Status:</label>
+        <select id="statusSelect-{{parcel.awb}}" (change)="onStatusChange(parcel.awb, $any($event.target).value)">
+          <option value="" disabled selected>Select new status</option>
+          <option *ngFor="let status of packageStatuses" [value]="status">
+            {{ status }}
+          </option>
+        </select>
+      </div>
+
+      <div class="parcel-details" *ngIf="expandedParcelIndex === i">
+        <div class="details-section">
+          <h3>Parcel Information</h3>
+          <div class="detail-row">
+            <span class="label">Size:</span>
+            <span class="value">{{ parcel.size }}</span>
+          </div>
+          <div class="detail-row">
+            <span class="label">Weight:</span>
+            <span class="value">{{ parcel.weight }} kg</span>
+          </div>
+          <div class="detail-row">
+            <span class="label">Price:</span>
+            <span class="value">${{ parcel.price.toFixed(2) }}</span>
+          </div>
+          <div class="detail-row">
+            <span class="label">Fragile:</span>
+            <span class="value">{{ parcel.fragile ? 'Yes' : 'No' }}</span>
+          </div>
+        </div>
+
+        <div class="details-section">
+          <h3>Recipient Details</h3>
+          <div class="detail-row">
+            <span class="label">Name:</span>
+            <span class="value">{{ parcel.destinationContact }}</span>
+          </div>
+          <div class="detail-row">
+            <span class="label">Address:</span>
+            <span class="value">{{ parcel.destinationAddress }}</span>
+          </div>
+          <div class="detail-row">
+            <span class="label">Email:</span>
+            <span class="value">{{ parcel.destinationEmail }}</span>
+          </div>
+          <div class="detail-row">
+            <span class="label">Phone:</span>
+            <span class="value">{{ parcel.destinationPhone }}</span>
+          </div>
+        </div>
+
+        <div class="details-section">
+          <h3>Tracking Information</h3>
+          <div class="detail-row">
+            <span class="label">Created:</span>
+            <span class="value">{{ formatDate(parcel.createdAt) }}</span>
+          </div>
+          <div class="detail-row">
+            <span class="label">Last Updated:</span>
+            <span class="value">{{ formatDate(parcel.updatedAt) }}</span>
+          </div>
+          <div class="detail-row">
+            <span class="label">Delivered:</span>
+            <span class="value" [ngClass]="{'delivered': parcel.delivered, 'not-delivered': !parcel.delivered}">
+              {{ parcel.delivered ? 'Yes' : 'No' }}
+            </span>
+          </div>
+        </div>
+
+        <div class="details-section">
+          <h3>Status History</h3>
+          <div class="status-timeline">
+            <div *ngFor="let timestamp of (Object.keys(parcel.statusHistory) | slice:0:5)" class="timeline-item">
+              <div class="timeline-status" [ngClass]="getStatusClass(parcel.statusHistory[timestamp])">
+                {{ parcel.statusHistory[timestamp] }}
+              </div>
+              <div class="timeline-time">{{ formatDate(timestamp) }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
