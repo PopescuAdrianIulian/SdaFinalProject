@@ -14,9 +14,7 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 @Service
 @Slf4j
@@ -84,8 +82,12 @@ public class ParcelService {
         if (tempUser == null) {
             throw new RuntimeException("User not found for email: " + email);
         }
+        Set<Parcel> combinedSet = new HashSet<>();
+        combinedSet.addAll(parcelRepository.findParcelByDestinationEmail(email));
+        combinedSet.addAll(tempUser.getParcels());
+
         ParcelResponse parcelResponse = new ParcelResponse();
-        return tempUser.getParcels()
+        return combinedSet
                 .stream()
                 .map(parcelResponse::createParcelResponse)
                 .toList();

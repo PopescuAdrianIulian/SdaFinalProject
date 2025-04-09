@@ -18,14 +18,18 @@ public class NotificationService {
         log.info("Fetching data {}", parcelResponse);
 
         String body = emailService.createBody(parcelResponse);
-        String to = parcelResponse.getEmail();
+        String toSender = parcelResponse.getEmail();
+        String toDestination = parcelResponse.getDestinationEmail();
         String subject = "Tracking service";
 
         try {
-            emailService.sendEmail(to, subject, body);
-            log.info("Sending email to {}", to);
+            emailService.sendEmail(toSender, subject, body);
+            emailService.sendEmail(toDestination, subject, body);
+            log.info("Sending email to {}", toSender);
+            log.info("Sending email to {}", toDestination);
         } catch (Exception e) {
-            log.error("Failed to send email to {}", to, e);
+            log.error("Failed to send email to {}", toSender, e);
+            log.error("Failed to send email to {}", toDestination, e);
         }
     }
 }

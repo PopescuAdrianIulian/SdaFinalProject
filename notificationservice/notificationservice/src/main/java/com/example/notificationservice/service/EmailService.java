@@ -35,6 +35,7 @@ public class EmailService {
         sb.append("We are pleased to provide you with an update on your package. Below are the details of your shipment:\n\n");
 
         sb.append("Package Details:\n");
+        sb.append(" - AWB: ").append(payload.getAwb()).append("\n");
         sb.append(" - Size: ").append(payload.getSize()).append("\n");
         sb.append(" - Weight: ").append(payload.getWeight()).append(" kg\n");
         sb.append(" - Fragile: ").append(payload.isFragile() ? "Yes" : "No").append("\n\n");
@@ -45,6 +46,7 @@ public class EmailService {
         sb.append(" - Destination Address: ").append(payload.getDestinationAddress()).append("\n");
         sb.append(" - Contact Person: ").append(payload.getDestinationContact()).append("\n");
         sb.append(" - Phone Number: ").append(payload.getDestinationPhone()).append("\n\n");
+        sb.append(" - Destination email: ").append(payload.getDestinationEmail()).append("\n\n");
 
         sb.append("Order Timeline:\n");
         sb.append(" - Order Placed: ").append(payload.getCreatedAt()).append("\n");
