@@ -17,8 +17,18 @@
   </div>
 
   <div *ngIf="parcels.length > 0" class="parcels-list">
+
+    <div class="sort-options">
+      <label for="sortSelect">Sort by:</label>
+      <select id="sortSelect" [(ngModel)]="selectedSort" (change)="sortParcels()">
+        <option value="createdDesc">Newest First</option>
+        <option value="createdAsc">Oldest First</option>
+        <option value="updatedDesc">Last Updated</option>
+        <option value="updatedAsc">First Updated</option>
+      </select>
+    </div>
+
     <div *ngFor="let parcel of parcels; let i = index" class="parcel-card">
-      <!-- Basic Information (Always Visible) -->
       <div class="parcel-summary" (click)="toggleParcelDetails(i)">
         <div class="parcel-info">
           <div class="parcel-awb">
@@ -42,7 +52,6 @@
         </div>
       </div>
 
-      <!-- Expanded Details -->
       <div class="parcel-details" *ngIf="expandedParcelIndex === i">
         <div class="details-section">
           <h3>Parcel Information</h3>
@@ -96,7 +105,9 @@
           </div>
           <div class="detail-row">
             <span class="label">Delivered:</span>
-            <span class="value" [ngClass]="{'delivered': parcel.delivered, 'not-delivered': !parcel.delivered}">{{ parcel.delivered ? 'Yes' : 'No' }}</span>
+            <span class="value" [ngClass]="{'delivered': parcel.delivered, 'not-delivered': !parcel.delivered}">
+              {{ parcel.delivered ? 'Yes' : 'No' }}
+            </span>
           </div>
         </div>
 

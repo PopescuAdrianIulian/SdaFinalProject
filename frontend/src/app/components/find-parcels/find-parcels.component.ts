@@ -4,6 +4,7 @@ import {CommonModule, NgClass, SlicePipe} from "@angular/common";
 import {ParcelService} from "@service/parcel.service";
 import {TokenDecoderService} from "@service/token.service";
 import {Router} from "@angular/router";
+import {FormsModule} from "@angular/forms";
 
 @Component({
   selector: 'app-find-parcels',
@@ -11,7 +12,8 @@ import {Router} from "@angular/router";
   imports: [
     NgClass,
     SlicePipe,
-    CommonModule
+    CommonModule,
+    FormsModule
   ],
   templateUrl: './find-parcels.component.html',
   styleUrl: './find-parcels.component.css'
@@ -23,13 +25,13 @@ export class FindParcelsComponent implements OnInit {
   expandedParcelIndex: number | null = null;
   token: string | null = localStorage.getItem('jwt');
   email = '';
+  selectedSort: string = 'createdDesc';
 
   constructor(
     private parcelService: ParcelService,
     private tokenDecoder: TokenDecoderService,
     private router: Router
-  ) {
-  }
+  ) { }
 
   ngOnInit(): void {
     if (this.token) {
@@ -47,6 +49,7 @@ export class FindParcelsComponent implements OnInit {
     this.parcelService.getAllParcelsByUser(this.email).subscribe({
       next: (data) => {
         this.parcels = data;
+        this.sortParcels();
         this.loading = false;
       },
       error: (err) => {
@@ -66,7 +69,6 @@ export class FindParcelsComponent implements OnInit {
     return `${date.toLocaleDateString()} ${date.toLocaleTimeString()}`;
   }
 
-  // Get the current status from status history
   getCurrentStatus(statusHistory: Record<string, PackageStatus>): PackageStatus {
     const timestamps = Object.keys(statusHistory).sort((a, b) =>
       new Date(b).getTime() - new Date(a).getTime()
@@ -89,9 +91,26 @@ export class FindParcelsComponent implements OnInit {
     }
   }
 
-  protected readonly Object = Object;
+  sortParcels(): void {
+    switch (this.selectedSort) {
+      case 'createdAsc':
+        this.parcels.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
+        break;
+      case 'createdDesc':
+        this.parcels.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+        break;
+      case 'updatedAsc':
+        this.parcels.sort((a, b) => new Date(a.updatedAt).getTime() - new Date(b.updatedAt).getTime());
+        break;
+      case 'updatedDesc':
+        this.parcels.sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime());
+        break;
+    }
+  }
 
   goToSendParcel() {
     this.router.navigate(['/sendParcel']);
   }
+
+  protected readonly Object = Object;
 }

@@ -31,7 +31,7 @@
     </div>
     <div class="detail-box">
       <span class="label">Weight:</span>
-      <span class="value">{{ p.weight }}</span>
+      <span class="value">{{ p.weight }} Kg</span>
     </div>
     <div class="detail-box">
       <span class="label">Destination:</span>
@@ -63,7 +63,7 @@
     <h3>Status History</h3>
     <ul>
       <li *ngFor="let status of (p.statusHistory | keyvalue)">
-        {{ status.key }}: {{ status.value }}
+        {{ formatDate(status.key) }}: {{ status.value }}
       </li>
     </ul>
   </div>
