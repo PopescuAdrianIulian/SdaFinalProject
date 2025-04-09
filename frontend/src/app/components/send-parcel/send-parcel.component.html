@@ -1,0 +1,156 @@
+<!-- send-parcel.component.html -->
+<div class="parcel-form-container">
+  <div class="progress-bar">
+    <div class="progress-step" [ngClass]="{'active': currentStep >= 1}">Step 1</div>
+    <div class="progress-step" [ngClass]="{'active': currentStep >= 2}">Step 2</div>
+    <div class="progress-step" [ngClass]="{'active': currentStep >= 3}">Step 3</div>
+    <div class="progress-step" [ngClass]="{'active': currentStep >= 4}">Review</div>
+  </div>
+
+  <!-- Step 1: Initial Details -->
+  <div class="form-step" *ngIf="currentStep === 1">
+    <h2>Package Details</h2>
+
+    <div class="form-group">
+      <label for="email">Your Email Address:</label>
+      <input type="email" id="email" [(ngModel)]="parcel.email" required>
+    </div>
+
+    <div class="form-group">
+      <label for="destinationEmail">Recipient's Email Address:</label>
+      <input type="email" id="destinationEmail" [(ngModel)]="parcel.destinationEmail" required>
+    </div>
+
+    <div class="form-group">
+      <label for="destinationPhone">Recipient's Phone Number:</label>
+      <input type="tel" id="destinationPhone" [(ngModel)]="parcel.destinationPhone" required>
+    </div>
+
+    <div class="form-group">
+      <label>Package Size:</label>
+      <div class="size-options">
+        <div class="size-option" [ngClass]="{'selected': parcel.size === 'SMALL'}" (click)="updateSize('SMALL')">
+          <span class="size-name">Small</span>
+          <span class="size-price">$9.99</span>
+        </div>
+        <div class="size-option" [ngClass]="{'selected': parcel.size === 'MEDIUM'}" (click)="updateSize('MEDIUM')">
+          <span class="size-name">Medium</span>
+          <span class="size-price">$14.99</span>
+        </div>
+        <div class="size-option" [ngClass]="{'selected': parcel.size === 'LARGE'}" (click)="updateSize('LARGE')">
+          <span class="size-name">Large</span>
+          <span class="size-price">$19.99</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="weight">Package Weight (kg):</label>
+      <input type="number" id="weight" [(ngModel)]="parcel.weight" min="0.1" step="0.1" required>
+    </div>
+
+    <div class="form-group checkbox-group">
+      <label>
+        <input type="checkbox" [(ngModel)]="parcel.fragile" (change)="toggleFragile()">
+        Fragile Item (+$5.00)
+      </label>
+    </div>
+
+    <div class="form-actions">
+      <button class="next-btn" (click)="nextStep()">Next Step</button>
+    </div>
+  </div>
+
+  <!-- Step 2: Destination Details -->
+  <div class="form-step" *ngIf="currentStep === 2">
+    <h2>Destination Contact</h2>
+
+    <div class="form-group">
+      <label for="firstName">First Name:</label>
+      <input type="text" id="firstName" [(ngModel)]="firstName" required>
+    </div>
+
+    <div class="form-group">
+      <label for="lastName">Last Name:</label>
+      <input type="text" id="lastName" [(ngModel)]="lastName" required>
+    </div>
+
+    <div class="form-group">
+      <label for="addressLine">Address Line:</label>
+      <input type="text" id="addressLine" [(ngModel)]="addressLine" required>
+    </div>
+
+    <div class="form-group">
+      <label for="city">City:</label>
+      <input type="text" id="city" [(ngModel)]="city" required>
+    </div>
+
+    <div class="form-group">
+      <label for="country">Country:</label>
+      <input type="text" id="country" [(ngModel)]="country" required>
+    </div>
+
+    <div class="form-actions">
+      <button class="back-btn" (click)="previousStep()">Back</button>
+      <button class="next-btn" (click)="nextStep()">Next Step</button>
+    </div>
+  </div>
+
+  <!-- Step 3: Additional Details -->
+  <div class="form-step" *ngIf="currentStep === 3">
+    <h2>Package Information</h2>
+
+    <div class="package-summary">
+      <h3>Current Selection</h3>
+      <p>
+        <strong>Size:</strong> {{ parcel.size }}
+        <span class="price-tag">${{ sizePrice[parcel.size].toFixed(2) }}</span>
+      </p>
+      <p><strong>Weight:</strong> {{ parcel.weight }} kg</p>
+      <p>
+        <strong>Fragile:</strong> {{ parcel.fragile ? 'Yes' : 'No' }}
+        <span *ngIf="parcel.fragile" class="price-tag">+$5.00</span>
+      </p>
+      <p><strong>Total Price:</strong> ${{ parcel.price.toFixed(2) }}</p>
+    </div>
+
+    <div class="form-actions">
+      <button class="back-btn" (click)="previousStep()">Back</button>
+      <button class="next-btn" (click)="nextStep()">Review Details</button>
+    </div>
+  </div>
+
+  <!-- Step 4: Review and Submit -->
+  <div class="form-step" *ngIf="currentStep === 4">
+    <h2>Review Your Parcel Request</h2>
+
+    <div class="review-section">
+      <h3>Contact Details</h3>
+      <p><strong>Your Email:</strong> {{ parcel.email }}</p>
+      <p><strong>Recipient Name:</strong> {{ parcel.destinationContact }}</p>
+      <p><strong>Recipient Email:</strong> {{ parcel.destinationEmail }}</p>
+      <p><strong>Recipient Phone:</strong> {{ parcel.destinationPhone }}</p>
+    </div>
+
+    <div class="review-section">
+      <h3>Delivery Address</h3>
+      <p>{{ parcel.destinationAddress }}</p>
+    </div>
+
+    <div class="review-section">
+      <h3>Package Details</h3>
+      <p><strong>Size:</strong> {{ parcel.size }}</p>
+      <p><strong>Weight:</strong> {{ parcel.weight }} kg</p>
+      <p><strong>Fragile:</strong> {{ parcel.fragile ? 'Yes' : 'No' }}</p>
+      <p><strong>Price:</strong> ${{ parcel.price.toFixed(2) }}</p>
+    </div>
+
+    <div class="form-actions">
+      <button class="back-btn" (click)="previousStep()">Back</button>
+      <button class="submit-btn" [disabled]="isLoading" (click)="submitParcel()">
+        <span *ngIf="!isLoading">Confirm & Send Parcel</span>
+        <span *ngIf="isLoading">Processing...</span>
+      </button>
+    </div>
+  </div>
+</div>

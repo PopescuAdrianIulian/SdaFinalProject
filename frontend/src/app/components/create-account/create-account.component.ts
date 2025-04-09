@@ -1,9 +1,10 @@
-import { Component } from '@angular/core';
-import { Router } from '@angular/router';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { UserService } from '@service/user.service';
-import { User } from '../../../model/user.model';
+import {Component} from '@angular/core';
+import {UserService} from "@service/user.service";
+import {Router} from "@angular/router";
+import {User} from "../../../model/user.model";
+import {CommonModule} from "@angular/common";
+import {FormsModule} from "@angular/forms";
+
 
 @Component({
   selector: 'app-create-account',
@@ -17,28 +18,22 @@ export class CreateAccountComponent {
   email: string = '';
   password: string = '';
   confirmPassword: string = '';
-  phone: string = '0743455172';
-  address: string = 'adress';
+  phone: string = '';
+  address: string = '';
   errorMessage: string = '';
 
-  constructor(private service: UserService, private router: Router) {}
+  constructor(private service: UserService, private router: Router) {
+  }
 
   goToLogin(): void {
     this.router.navigate(['/login']);
   }
 
   onCreateAccount(): void {
-     console.log('Name:', this.name);
-      console.log('Email:', this.email);
-      console.log('Password:', this.password);
-      console.log('Confirm Password:', this.confirmPassword);
-      console.log('Phone:', this.phone);
-      console.log('Address:', this.address);
     if (this.password !== this.confirmPassword) {
       this.errorMessage = 'Passwords do not match';
       return;
     }
-
     const user: User = {
       name: this.name,
       email: this.email,

@@ -21,6 +21,7 @@ public class ParcelResponse {
     private String destinationAddress;
     private String destinationContact;
     private String destinationPhone;
+    private String destinationEmail;
     private boolean fragile;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;

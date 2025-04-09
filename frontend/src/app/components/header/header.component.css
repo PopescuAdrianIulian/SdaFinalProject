@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
+
 :host {
   display: block;
 }
@@ -12,6 +14,7 @@
   align-items: center;
   justify-content: space-between;
   position: relative;
+  font-family: 'Poppins', sans-serif; /* Modern font */
 }
 
 /* Flex zones */
@@ -21,16 +24,26 @@
 
 /* Left: Logo */
 .logo {
-  font-size: 1.6rem;
-  font-weight: bold;
+  font-size: 2rem; /* Larger font size */
+  font-weight: 600;
   color: #ff6600;
+  cursor: pointer;
+  transition: transform 0.3s ease-in-out;
+}
+
+.logo:hover {
+  transform: rotate(-10deg); /* Animated effect */
+}
+
+.logo:active {
+  transform: scale(0.95); /* Smaller on click */
 }
 
 /* Center: Nav menu */
 .nav {
   display: flex;
   justify-content: center;
-  gap: 1rem;
+  gap: 1.5rem; /* More space between buttons */
 }
 
 .nav button {
@@ -40,15 +53,15 @@
   font-size: 1rem;
   font-weight: 500;
   cursor: pointer;
-  padding: 0.5rem 0.75rem;
-  border-radius: 6px;
-  transition: background-color 0.2s ease, transform 0.2s ease, color 0.2s ease;
+  padding: 0.75rem 1rem; /* Larger padding */
+  border-radius: 8px; /* Rounded corners */
+  transition: background-color 0.3s ease, transform 0.2s ease, color 0.3s ease;
 }
 
 .nav button:hover {
-  color: #ff6600;
-  background-color: rgba(255, 102, 0, 0.1);
-  transform: translateY(-1px);
+  color: #fff;
+  background-color: #ff6600; /* Orange background on hover */
+  transform: translateY(-2px); /* Slightly lifted effect */
 }
 
 /* Right: Welcome + Logout */
@@ -66,16 +79,22 @@
 }
 
 .user-message-logout button {
-  padding: 0.5rem 0.75rem;
+  padding: 0.75rem 1rem; /* Larger padding */
   background-color: #ff6600;
   color: white;
   border: none;
-  border-radius: 6px;
+  border-radius: 8px;
   cursor: pointer;
   font-weight: bold;
-  transition: background-color 0.2s ease;
+  transition: background-color 0.3s ease;
 }
 
 .user-message-logout button:hover {
   background-color: #e65c00;
+}
+
+/* Orange hover effects for login/logout */
+.user-message-logout button:focus {
+  outline: 2px solid #ff6600;
+  outline-offset: 4px;
 }

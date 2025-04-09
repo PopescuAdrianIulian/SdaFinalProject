@@ -5,7 +5,7 @@
   width: 100%;
   position: relative;
   overflow: hidden;
-  font-family: 'Segoe UI', sans-serif;
+  font-family: 'Poppins', sans-serif;
   color: white;
 }
 
@@ -26,7 +26,7 @@
   animation: backgroundCycle 50s infinite ease-in-out;
   background: url('/assets/images/home1.png') no-repeat center center/cover;
   z-index: 0;
-  filter: brightness(0.75);
+  filter: brightness(0.5);
 }
 
 /* Container that centers the login box */
@@ -51,13 +51,19 @@ form {
   text-align: center;
   box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.5);
   backdrop-filter: blur(10px);
+  animation: fadeIn 1s ease-out;
 }
 
+/* Title */
 h2 {
   margin-bottom: 2rem;
-  font-size: 2rem;
+  font-size: 2.2rem;
+  color: #ff6600;
+  font-weight: 600;
+  animation: fadeInTitle 0.8s ease-out;
 }
 
+/* Form Group */
 .form-group {
   margin-bottom: 1.5rem;
   text-align: left;
@@ -65,6 +71,9 @@ h2 {
 
 label {
   font-size: 1.1rem;
+  font-weight: 500;
+  color: #ffffff;
+  transition: color 0.3s ease;
 }
 
 input {
@@ -75,12 +84,18 @@ input {
   border: 1px solid rgba(255, 255, 255, 0.3);
   border-radius: 6px;
   color: white;
+  transition: border 0.3s ease;
 }
 
 input::placeholder {
   color: #bcbcbc;
 }
 
+input:focus {
+  border: 1px solid #ff6600;
+}
+
+/* Buttons */
 button {
   width: 100%;
   padding: 1.1rem;
@@ -90,13 +105,14 @@ button {
   background-color: #ff6600;
   color: white;
   border: none;
-  margin-top: 1rem;
+  margin-top: 1.5rem;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 button:hover {
   background-color: #e65c00;
+  transform: scale(1.05);
 }
 
 .secondary-btn {
@@ -104,13 +120,17 @@ button:hover {
   border: 2px solid #ff6600;
   color: #ff6600;
   transition: all 0.3s ease;
+  padding: 0.8rem 1.2rem;
+  margin-top: 1rem;
 }
 
 .secondary-btn:hover {
   background-color: #ff6600;
   color: white;
+  transform: scale(1.05);
 }
 
+/* Error Message */
 .error-message {
   color: #ff4b4b;
   font-size: 1rem;
@@ -133,5 +153,29 @@ button:hover {
   }
   100% {
     background: url('/assets/images/home1.png') no-repeat center center/cover;
+  }
+}
+
+/* Animation for form fade-in */
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Animation for title fade-in */
+@keyframes fadeInTitle {
+  0% {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
   }
 }

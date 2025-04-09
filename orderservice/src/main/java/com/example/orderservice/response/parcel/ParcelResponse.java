@@ -23,6 +23,7 @@ public class ParcelResponse {
     private String destinationAddress;
     private String destinationContact;
     private String destinationPhone;
+    private String destinationEmail;
     private boolean fragile;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
@@ -39,7 +40,9 @@ public class ParcelResponse {
                 .weight(parcel.getWeight())
                 .destinationAddress(parcel.getDestinationAddress())
                 .destinationPhone(parcel.getDestinationPhone())
+                .destinationContact(parcel.getDestinationContact())
                 .fragile(parcel.isFragile())
+                .destinationEmail(parcel.getDestinationEmail())
                 .createdAt(parcel.getCreatedAt())
                 .updatedAt(parcel.getUpdatedAt())
                 .delivered(parcel.isDelivered())

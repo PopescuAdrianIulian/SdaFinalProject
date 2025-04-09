@@ -1,10 +1,10 @@
 import {Component} from '@angular/core';
-import {Router} from "@angular/router";
 import {FormsModule} from "@angular/forms";
-import {ParcelService} from "../../../service/parcel.service";
-import {ParcelResponse} from "../../../model/parcel.model";
 import {CommonModule, KeyValuePipe} from "@angular/common";
-import {pipe} from "rxjs";
+import {ParcelResponse} from "../../../model/parcel.model";
+import {Router} from "@angular/router";
+import {ParcelService} from "@service/parcel.service";
+
 
 @Component({
   selector: 'app-home',
@@ -36,5 +36,4 @@ export class HomeComponent {
         });
   }
 
-  protected readonly pipe = pipe;
 }

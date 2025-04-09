@@ -6,10 +6,12 @@
 }
 
 body, .container {
-  font-family: 'Segoe UI', sans-serif;
+  font-family: 'Roboto', sans-serif; /* Custom font */
   line-height: 1.6;
-  background-color: #fdfdfd;
+  background-color: #f4f4f4;
   color: #333;
+  margin: 0;
+  padding: 0;
 }
 
 .container {
@@ -22,17 +24,17 @@ body, .container {
 .header {
   background-color: #ffffff;
   padding: 1rem 0;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
   position: sticky;
   top: 0;
-  z-index: 9999; /* Higher z-index to ensure it's above all other content */
+  z-index: 9999;
   transition: all 0.3s ease-in-out;
 }
 
 .logo {
-  font-size: 1.8rem;
+  font-size: 2rem;
   font-weight: bold;
-  color: #ff6600;
+  color: #ff6600; /* Orange accent */
   animation: fadeIn 1s ease;
 }
 
@@ -45,11 +47,11 @@ body, .container {
   text-decoration: none;
   color: #333;
   font-weight: 500;
-  transition: color 0.2s ease;
+  transition: color 0.3s ease;
 }
 
 .nav a:hover {
-  color: #ff6600;
+  color: #ff6600; /* Hover effect in orange */
 }
 
 .header .container {
@@ -97,7 +99,7 @@ body, .container {
   text-align: center;
   color: #fff;
   padding: 3rem;
-  background-color: rgba(0, 0, 0, 0.65);
+  background-color: rgba(0, 0, 0, 0.6); /* Darker overlay for better text contrast */
   border-radius: 16px;
   max-width: 700px;
   animation: slideIn 1.5s ease;
@@ -120,8 +122,8 @@ body, .container {
   justify-content: center;
   flex-wrap: wrap;
   gap: 0.75rem;
-  max-width: 100%; /* Ensure it doesn't overflow */
-  margin-top: 1.5rem; /* Adds space below hero content */
+  max-width: 100%;
+  margin-top: 1.5rem;
 }
 
 .awb-form input {
@@ -135,12 +137,12 @@ body, .container {
 }
 
 .awb-form input:focus {
-  border-color: #ff6600;
+  border-color: #ff6600; /* Highlight input with orange */
 }
 
 .awb-form button {
   padding: 0.9rem 1.4rem;
-  background-color: #ff6600;
+  background-color: #ff6600; /* Orange button */
   border: none;
   border-radius: 6px;
   color: white;
@@ -151,7 +153,7 @@ body, .container {
 }
 
 .awb-form button:hover {
-  background-color: #e65c00;
+  background-color: #e65c00; /* Darker orange on hover */
   transform: translateY(-2px);
 }
 
@@ -170,7 +172,7 @@ body, .container {
   text-align: center;
   margin-bottom: 1.5rem;
   font-size: 2rem;
-  color: #ff6600;
+  color: #ff6600; /* Highlight header in orange */
 }
 
 .details-grid {
@@ -185,8 +187,8 @@ body, .container {
   padding: 0.75rem 1rem;
   border: 1px solid #eaeaea;
   border-radius: 8px;
-  transition: transform 0.2s ease;
   background-color: #fafafa;
+  transition: transform 0.2s ease;
 }
 
 .detail-box:hover {
@@ -301,6 +303,6 @@ body, .container {
 
 :host {
   display: block;
-  height: 100%; /* This will now be 100% of the remaining viewport (after header) */
-  background: lightblue;
+  height: 100%;
+  background: #f4f4f4;
 }

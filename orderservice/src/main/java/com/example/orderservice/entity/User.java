@@ -25,20 +25,20 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-//    @NotBlank(message = "Name cannot be empty")
+    @NotBlank(message = "Name cannot be empty")
     private String name;
 
-//    @NotBlank(message = "Email cannot be empty")
+    @NotBlank(message = "Email cannot be empty")
     private String email;
 
-//    @NotBlank(message = "Phone cannot be empty")
+    @NotBlank(message = "Phone cannot be empty")
     private String phone;
 
-//    @NotBlank(message = "Address cannot be empty")
+    @NotBlank(message = "Address cannot be empty")
     private String address;
 
-//    @NotBlank(message = "Password cannot be empty")
-//    @Pattern(regexp = "^(?=.*\\d)(?=.*[\\W_]).{8,}$")
+    @NotBlank(message = "Password cannot be empty")
+    @Pattern(regexp = "^(?=.*\\d)(?=.*[\\W_]).{8,}$")
     private String password;
 
     @Enumerated(EnumType.STRING)

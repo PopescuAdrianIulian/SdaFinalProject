@@ -30,6 +30,30 @@
       </div>
 
       <div class="form-group">
+        <label for="phone">Phone</label>
+        <input
+          type="tel"
+          id="phone"
+          name="phone"
+          [(ngModel)]="phone"
+          required
+          placeholder="Enter your phone number"
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="address">Address</label>
+        <input
+          type="text"
+          id="address"
+          name="address"
+          [(ngModel)]="address"
+          required
+          placeholder="Enter your address"
+        />
+      </div>
+
+      <div class="form-group">
         <label for="password">Password</label>
         <input
           type="password"
@@ -57,12 +81,7 @@
 
       <button type="submit">Create Account</button>
 
-      <h4>Already have an account?</h4>
-      <button
-        type="button"
-        class="secondary-btn"
-        (click)="goToLogin()"
-      >
+      <button type="button" class="secondary-btn" (click)="goToLogin()">
         Go to Login
       </button>
     </form>

@@ -10,34 +10,33 @@
 
 /* Page container */
 .create-account-page {
-  position: relative;
+  height: 100%;
   width: 100%;
-  min-height: 100%;
-  display: flex;
-  flex-direction: column;
+  position: relative;
 }
 
 /* Background behind everything */
 .create-account-background {
-  position: fixed;
+  position: absolute;
   top: 0;
   left: 0;
   height: 100%;
   width: 100%;
-  z-index: -1;
-  filter: brightness(0.75);
   animation: backgroundCycle 50s infinite ease-in-out;
   background: url('/assets/images/home1.png') no-repeat center center/cover;
+  z-index: 0;
+  filter: brightness(0.5);
 }
 
 /* Container for centering the form */
 .create-account-container {
   position: relative;
   z-index: 1;
-  flex: 1;
+  height: 100%;
   display: flex;
   justify-content: center;
-  padding: 2rem 1rem;
+  align-items: center;
+  padding: 2rem;
   box-sizing: border-box;
 }
 
@@ -70,7 +69,10 @@
 
 h2 {
   margin-bottom: 2rem;
-  font-size: 2rem;
+  font-size: 2.2rem;
+  color: #ff6600;
+  font-weight: 600;
+  animation: fadeInTitle 0.8s ease-out;
 }
 
 .form-group {
@@ -80,8 +82,9 @@ h2 {
 
 label {
   font-size: 1.1rem;
-  display: block;
-  margin-bottom: 0.3rem;
+  font-weight: 500;
+  color: #ffffff;
+  transition: color 0.3s ease;
 }
 
 input {
@@ -92,6 +95,7 @@ input {
   border: 1px solid rgba(255, 255, 255, 0.3);
   border-radius: 6px;
   color: white;
+  transition: border 0.3s ease;
 }
 
 input::placeholder {
@@ -99,8 +103,7 @@ input::placeholder {
 }
 
 input:focus {
-  outline: none;
-  background-color: rgba(255, 255, 255, 0.2);
+  border: 1px solid #ff6600;
 }
 
 button {
@@ -112,13 +115,14 @@ button {
   background-color: #ff6600;
   color: white;
   border: none;
-  margin-top: 1rem;
+  margin-top: 1.5rem;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 button:hover {
   background-color: #e65c00;
+  transform: scale(1.05);
 }
 
 .secondary-btn {
@@ -126,12 +130,14 @@ button:hover {
   border: 2px solid #ff6600;
   color: #ff6600;
   transition: all 0.3s ease;
+  padding: 0.8rem 1.2rem;
   margin-top: 1rem;
 }
 
 .secondary-btn:hover {
   background-color: #ff6600;
   color: white;
+  transform: scale(1.05);
 }
 
 .error-message {
@@ -140,7 +146,6 @@ button:hover {
   margin: 0.5rem 0;
 }
 
-/* Background image animation */
 @keyframes backgroundCycle {
   0%, 5% {
     background: url('/assets/images/home1.png') no-repeat center center/cover;
@@ -159,23 +164,26 @@ button:hover {
   }
 }
 
-/* Small screen adjustments */
-@media (max-width: 480px) {
-  .create-account-container form {
-    padding: 1.5rem 1rem;
+/* Animation for form fade-in */
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(30px);
   }
-
-  h2 {
-    font-size: 1.5rem;
+  100% {
+    opacity: 1;
+    transform: translateY(0);
   }
+}
 
-  input {
-    padding: 0.9rem;
-    font-size: 1rem;
+/* Animation for title fade-in */
+@keyframes fadeInTitle {
+  0% {
+    opacity: 0;
+    transform: translateY(-20px);
   }
-
-  button {
-    font-size: 1rem;
-    padding: 1rem;
+  100% {
+    opacity: 1;
+    transform: translateY(0);
   }
 }

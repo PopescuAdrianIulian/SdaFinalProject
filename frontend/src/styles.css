@@ -1,6 +1,9 @@
+/* Apply the font family globally */
 body, .container {
   font-family: 'Inter', sans-serif;
 }
+
+/* Universal reset for all elements */
 * {
   margin: 0;
   padding: 0;

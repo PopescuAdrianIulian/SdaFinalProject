@@ -1,9 +1,10 @@
-import { Component } from '@angular/core';
-import { Router } from '@angular/router';
-import { NgIf } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { UserService } from '@service/user.service';
-import { TokenDecoderService } from '@service/token.service';
+import {Component} from "@angular/core";
+import {NgIf} from "@angular/common";
+import {FormsModule} from "@angular/forms";
+import {UserService} from "@service/user.service";
+import {Router} from "@angular/router";
+import {TokenDecoderService} from "@service/token.service";
+
 
 @Component({
   selector: 'app-login',
@@ -21,7 +22,8 @@ export class LoginComponent {
     private service: UserService,
     private router: Router,
     private tokenDecoder: TokenDecoderService
-  ) {}
+  ) {
+  }
 
   goToCreateAccount(): void {
     this.router.navigate(['/createAccount']);
@@ -38,7 +40,6 @@ export class LoginComponent {
         const token = response.token;
 
         if (token) {
-          // Save token and decode
           localStorage.setItem('jwt', token);
           this.tokenDecoder.setUsernameFromToken(token);
 
@@ -51,13 +52,13 @@ export class LoginComponent {
             console.log('Issued At:', new Date(payload.iat * 1000));
             console.log('Expires At:', new Date(payload.exp * 1000));
 
-            // Redirect based on user type
             switch (payload.type) {
               case 'ADMIN':
                 this.router.navigate(['/admin/dashboard']);
+                window.location.reload();
                 break;
               case 'USER':
-                this.router.navigate(['/sendParcel']);
+                this.router.navigate(['/home']);
                 break;
               case 'COURIER':
                 this.router.navigate(['/courier/dashboard']);
@@ -79,4 +80,5 @@ export class LoginComponent {
       }
     });
   }
+
 }

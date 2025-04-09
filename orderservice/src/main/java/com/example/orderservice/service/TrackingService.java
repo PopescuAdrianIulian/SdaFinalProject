@@ -49,6 +49,9 @@ public class TrackingService {
 
         tempParcel.setDelivered(true);
         tempParcel.setUpdatedAt(LocalDateTime.now());
+        tempParcel.setStatus(PackageStatus.DELIVERED);
+        Map<LocalDateTime, PackageStatus> statusHistory = tempParcel.getStatusHistory();
+        statusHistory.put(LocalDateTime.now(), PackageStatus.DELIVERED);
         parcelRepository.saveAndFlush(tempParcel);
         ParcelResponse payload = new ParcelResponse().createParcelResponse(tempParcel);
         kafkaTemplate.send(NOTIFICATION_TOPIC, payload);

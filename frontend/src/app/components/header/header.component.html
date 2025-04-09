@@ -1,15 +1,30 @@
 <header class="header">
-  <div class="header-section logo">QuickShip</div>
+  <div class="header-section logo" (click)="goToHome()">QuickShip</div>
 
-  <nav class="header-section nav">
+  <nav class="header-section nav" *ngIf="userType === 'USER'">
     <button (click)="goToHome()">Home</button>
-    <button (click)="goToLogin()">Send Parcel</button>
-    <button (click)="goToLogin()">Deliver</button>
-    <button (click)="goToLogin()">System</button>
+    <button (click)="goToSendParcel()">Send Parcel</button>
+    <button (click)="goToMyParcels()">My Parcels</button>
+    <button (click)="goToSystem()">System</button>
+  </nav>
+
+  <nav class="header-section nav" *ngIf="userType === 'ADMIN'">
+    <button (click)="goToDashboard()">Dashboard</button>
+    <button (click)="goToProducts()">Products</button>
+    <button (click)="goToSystem()">System</button>
+  </nav>
+
+  <nav class="header-section nav" *ngIf="userType === 'COURIER'">
+    <button (click)="goToDashboard()">Dashboard</button>
+    <button (click)="goToSystem()">System</button>
   </nav>
 
   <div class="header-section user-message-logout" *ngIf="isLoggedIn">
     <p>Welcome, {{ username }}</p>
     <button (click)="logout()">Logout</button>
+  </div>
+
+  <div class="header-section user-message-logout" *ngIf="!isLoggedIn">
+    <button (click)="goToLogin()">Login</button>
   </div>
 </header>

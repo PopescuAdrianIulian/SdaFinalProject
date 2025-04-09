@@ -42,6 +42,9 @@ public class ParcelRequest {
     @NotBlank(message = "Phone contact cannot be empty")
     private String destinationPhone;
 
+    @NotBlank(message = "Email contact cannot be empty")
+    private String destinationEmail;
+
     private boolean fragile;
 
     private double price;
@@ -60,6 +63,7 @@ public class ParcelRequest {
                 .destinationAddress(this.getDestinationAddress())
                 .destinationContact(this.getDestinationContact())
                 .destinationPhone(this.getDestinationPhone())
+                .destinationEmail(this.getDestinationEmail())
                 .fragile(this.isFragile())
                 .createdAt(LocalDateTime.now())
                 .updatedAt(LocalDateTime.now())

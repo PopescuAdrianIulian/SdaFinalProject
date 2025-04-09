@@ -14,7 +14,7 @@
             required
             aria-label="AWB Number"
           />
-          <button type="submit">Track</button>
+          <button type="submit" class="track-btn">Track</button>
         </div>
       </div>
     </div>
@@ -42,11 +42,15 @@
       <span class="value">{{ p.destinationContact }}</span>
     </div>
     <div class="detail-box">
+      <span class="label">Destination email:</span>
+      <span class="value">{{ p.destinationEmail }}</span>
+    </div>
+    <div class="detail-box">
       <span class="label">Phone:</span>
       <span class="value">{{ p.destinationPhone }}</span>
     </div>
     <div class="detail-box">
-      <span class="label">Email:</span>
+      <span class="label">Sender email:</span>
       <span class="value">{{ p.email }}</span>
     </div>
     <div class="detail-box">

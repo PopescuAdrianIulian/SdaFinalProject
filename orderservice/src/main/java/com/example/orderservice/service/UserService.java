@@ -47,6 +47,17 @@ public class UserService {
         }
     }
 
+
+    public User createNewAccountAdmin(User user) {
+        if (!userRepository.existsByEmail(user.getEmail())) {
+            user.setPassword(encrypt.hashPassword(user.getPassword()));
+            user.setUserType(UserType.ADMIN);
+            return userRepository.saveAndFlush(user);
+        } else {
+            throw new RuntimeException("Email is already used");
+        }
+    }
+
     public User updatePassword(AuthRequest authRequest) {
         User tempUser = userRepository.getUserByEmail(authRequest.getEmail());
         tempUser.setPassword(encrypt.hashPassword(authRequest.getPassword()));

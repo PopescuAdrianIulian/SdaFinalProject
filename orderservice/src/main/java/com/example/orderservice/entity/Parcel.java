@@ -45,6 +45,9 @@ public class Parcel {
     @NotBlank(message = "Phone contact cannot be empty")
     private String destinationPhone;
 
+    @NotBlank(message = "Email contact cannot be empty")
+    private String destinationEmail;
+
     private boolean fragile;
 
     private LocalDateTime createdAt;
