@@ -1,7 +1,7 @@
-import {HttpClient} from "@angular/common/http";
-import {Injectable} from "@angular/core";
-import {Observable} from "rxjs";
-import {SupportTicketRequest, TicketStatus} from "../model/support.model";
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { SupportTicketRequest, SupportTicketResponse, TicketStatus } from '../model/support.model';
 
 @Injectable({
   providedIn: 'root'
@@ -11,11 +11,27 @@ export class SupportTicketService {
 
   constructor(private http: HttpClient) {}
 
-  createSupportTicket(ticketRequest: SupportTicketRequest): Observable<any> {
-    return this.http.post(`${this.apiUrl}/create`, ticketRequest);
+  createSupportTicket(ticketRequest: SupportTicketRequest): Observable<SupportTicketResponse> {
+    return this.http.post<SupportTicketResponse>(`${this.apiUrl}/create`, ticketRequest);
   }
 
-  updateSupportTicket(id: number, newStatus: TicketStatus): Observable<any> {
-    return this.http.post(`${this.apiUrl}/${id}/${newStatus}`, {});
+  updateSupportTicketStatus(id: number, newStatus: TicketStatus): Observable<SupportTicketResponse> {
+    return this.http.post<SupportTicketResponse>(`${this.apiUrl}/${id}/${newStatus}`, {});
+  }
+
+  getOpenTickets(): Observable<SupportTicketResponse[]> {
+    return this.http.get<SupportTicketResponse[]>(`${this.apiUrl}/openTickets`);
+  }
+
+  getMyTickets(userId: number): Observable<SupportTicketResponse[]> {
+    return this.http.get<SupportTicketResponse[]>(`${this.apiUrl}/myTickets/${userId}`);
+  }
+
+  getMyOpenTickets(userId: number): Observable<SupportTicketResponse[]> {
+    return this.http.get<SupportTicketResponse[]>(`${this.apiUrl}/myOpenTickets/${userId}`);
+  }
+
+  getAllUnresolvedTickets(): Observable<SupportTicketResponse[]> {
+    return this.http.get<SupportTicketResponse[]>(`${this.apiUrl}/getAll`);
   }
 }

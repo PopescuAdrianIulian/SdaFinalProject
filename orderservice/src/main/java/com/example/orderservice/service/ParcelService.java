@@ -50,7 +50,7 @@ public class ParcelService {
         parcelRepository.save(parcel);
 
         ParcelResponse payload = new ParcelResponse().createParcelResponse(parcel);
-        kafkaTemplate.send(NOTIFICATION_TOPIC, payload);
+//        kafkaTemplate.send(NOTIFICATION_TOPIC, payload);
         log.info("Parcel created with AWB: {}", awb);
         return payload;
     }

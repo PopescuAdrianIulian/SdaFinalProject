@@ -6,6 +6,8 @@ import {SendParcelComponent} from "./components/send-parcel/send-parcel.componen
 import {FindParcelsComponent} from "./components/find-parcels/find-parcels.component";
 import {DashboardComponent} from "./components/courier-dashboard/dashboard.component";
 import {SupportComponent} from "./components/support/support.component";
+import {SupportTicketsComponent} from "./components/support-tickets/support-tickets.component";
+
 
 export const routes: Routes = [
   {path: '', component: HomeComponent},
@@ -16,6 +18,7 @@ export const routes: Routes = [
   {path: 'myParcels', component: FindParcelsComponent},
   {path: 'dashboard', component: DashboardComponent},
   {path: 'support', component: SupportComponent},
+  {path: 'tickets', component: SupportTicketsComponent},
 
 
 ];

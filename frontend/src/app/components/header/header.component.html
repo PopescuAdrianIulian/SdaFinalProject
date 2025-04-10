@@ -9,13 +9,13 @@
   </nav>
 
   <nav class="header-section nav" *ngIf="userType === 'ADMIN'">
-    <button (click)="goToDashboard()">Dashboard</button>
-    <button (click)="goToProducts()">Products</button>
+    <button (click)="goToDashboard()">Courier Dashboard</button>
+    <button (click)="goToProducts()">Support Tickets</button>
     <button (click)="goToSystem()">System</button>
   </nav>
 
   <nav class="header-section nav" *ngIf="userType === 'COURIER'">
-    <button (click)="goToDashboard()">Dashboard</button>
+    <button (click)="goToDashboard()">Parcels</button>
     <button (click)="goToSystem()">System</button>
   </nav>
 

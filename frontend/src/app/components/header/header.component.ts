@@ -85,6 +85,7 @@ export class HeaderComponent implements OnInit {
   }
 
   goToProducts() {
+    this.router.navigate(['/tickets'])
 
   }
 }

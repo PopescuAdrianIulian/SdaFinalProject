@@ -5,6 +5,7 @@ import com.example.orderservice.response.support.SupportTicketResponse;
 import com.example.orderservice.service.SupportTicketService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.boot.model.internal.CreateKeySecondPass;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,6 +32,21 @@ public class SupportTicketController {
     @GetMapping("/getAll")
     public ResponseEntity<List<SupportTicketResponse>> getAllUnresolvedTickets() {
         return ResponseEntity.ok(supportTicketService.getAllUnresolvedTickets());
+    }
+
+    @GetMapping("/myTickets/{id}")
+    public ResponseEntity<List<SupportTicketResponse>> getMyTickets(@Valid @PathVariable Long id){
+        return ResponseEntity.ok(supportTicketService.getMyAssignedTickets(id));
+    }
+
+    @GetMapping("/openTickets")
+    public ResponseEntity<List<SupportTicketResponse>> getOpenTickets(){
+        return ResponseEntity.ok(supportTicketService.getAllOpenTickets());
+    }
+
+    @GetMapping("/myOpenTickets")
+    public ResponseEntity<List<SupportTicketResponse>> getMyAssignedTicketsInProgress(@Valid @PathVariable Long id){
+        return ResponseEntity.ok(supportTicketService.getMyAssignedTicketsInProgress(id));
     }
 
 

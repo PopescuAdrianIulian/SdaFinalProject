@@ -24,14 +24,17 @@ public class JwtService {
     }
 
     public String generateToken(User user) {
-        System.out.println("Generating token for user: " + user.getEmail() + ", type: " + user.getUserType());
+        System.out.println("Generating token for user: " + user.getEmail() + ", type: " + user.getUserType() + "id: " + user.getId());
+
         return Jwts.builder()
                 .setSubject(user.getEmail())
                 .claim("type", user.getUserType())
+                .claim("id", user.getId())
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
                 .signWith(key)
                 .compact();
+
     }
 
     public String extractEmailFromToken(String token) {

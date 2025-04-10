@@ -1,8 +1,8 @@
-import {Component} from '@angular/core';
-import {FormsModule} from "@angular/forms";
-import {NgClass, NgIf} from "@angular/common";
-import {SupportTicketService} from "@service/support.service";
-import {SupportTicketRequest} from "../../../model/support.model";
+import { Component } from '@angular/core';
+import { FormsModule } from "@angular/forms";
+import { NgClass, NgIf } from "@angular/common";
+import { SupportTicketService } from "@service/support.service";
+import { SupportTicketRequest } from "../../../model/support.model";
 
 @Component({
   selector: 'app-support',
@@ -21,14 +21,17 @@ export class SupportComponent {
   successMessage = '';
   errorMessage = '';
 
+  // ✅ Properly define and initialize this
   supportTicket: SupportTicketRequest = {
     email: '',
     title: '',
-    description: ''
+    description: '',
+    createdAt: new Date().toISOString(),
+    ticketStatus: 'OPEN',
+    handlingHistory: {}
   };
 
-  constructor(private supportTicketService: SupportTicketService) {
-  }
+  constructor(private supportTicketService: SupportTicketService) {}
 
   nextStep() {
     if (this.currentStep < 3) {
@@ -48,11 +51,21 @@ export class SupportComponent {
     this.errorMessage = '';
 
     this.supportTicketService.createSupportTicket(this.supportTicket).subscribe({
-      next: (response) => {
+      next: () => {
         this.isLoading = false;
         this.successMessage = 'Support ticket submitted successfully!';
         this.currentStep = 1;
-        this.supportTicket = {email: '', title: '', description: ''};
+
+
+        this.supportTicket = {
+          email: '',
+          title: '',
+          description: '',
+          createdAt: new Date().toISOString(),
+          ticketStatus: 'OPEN',
+          handlingHistory: {}
+        };
+
       },
       error: (error) => {
         this.isLoading = false;

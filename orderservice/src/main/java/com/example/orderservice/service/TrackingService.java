@@ -100,7 +100,7 @@ public class TrackingService {
     }
 
     private void sendNotification(ParcelResponse payload) {
-        kafkaTemplate.send(notificationTopic, payload);
+//        kafkaTemplate.send(notificationTopic, payload);
         log.info("Sending payload for the notification service {}", payload);
     }
 }
