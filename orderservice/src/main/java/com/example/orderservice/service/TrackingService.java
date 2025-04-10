@@ -80,7 +80,7 @@ public class TrackingService {
 
     public List<ParcelResponse> getAllUndeliveredParcels() {
         List<Parcel> parcels = parcelRepository.findAll().stream()
-                .filter(parcel -> !parcel.isDelivered() || !"DELIVERED".equals(parcel.getStatus()))
+                .filter(parcel -> parcel.getStatus() != PackageStatus.DELIVERED && parcel.getStatus() != PackageStatus.RETURNED)
                 .collect(Collectors.toList());
 
         ParcelResponse parcelResponse = new ParcelResponse();

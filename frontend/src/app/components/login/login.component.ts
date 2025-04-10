@@ -61,7 +61,7 @@ export class LoginComponent {
                 this.router.navigate(['/home']);
                 break;
               case 'COURIER':
-                this.router.navigate(['/courier/dashboard']);
+                this.router.navigate(['/dashboard']);
                 break;
               default:
                 this.router.navigate(['/home']);

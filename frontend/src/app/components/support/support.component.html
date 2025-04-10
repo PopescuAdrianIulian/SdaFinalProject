@@ -1,0 +1,69 @@
+<div class="support-form-container">
+
+  <div class="success-message" *ngIf="successMessage">
+    <p>{{ successMessage }}</p>
+    <p>Please wait for an email from our support team.</p>
+  </div>
+
+  <div class="progress-bar" *ngIf="!successMessage">
+    <div class="progress-step" [ngClass]="{ 'active': currentStep >= 1 }">Step 1</div>
+    <div class="progress-step" [ngClass]="{ 'active': currentStep >= 2 }">Step 2</div>
+    <div class="progress-step" [ngClass]="{ 'active': currentStep >= 3 }">Review</div>
+  </div>
+
+  <div class="form-step" *ngIf="currentStep === 1 && !successMessage">
+    <h2>Your Contact Info</h2>
+
+    <div class="form-group">
+      <label for="email">Your Email Address:</label>
+      <input type="email" id="email" [(ngModel)]="supportTicket.email" required>
+    </div>
+
+    <div class="form-actions">
+      <button class="next-btn" (click)="nextStep()">Next Step</button>
+    </div>
+  </div>
+
+  <div class="form-step" *ngIf="currentStep === 2 && !successMessage">
+    <h2>Describe Your Issue</h2>
+
+    <div class="form-group">
+      <label for="title">Title:</label>
+      <input type="text" id="title" [(ngModel)]="supportTicket.title" required>
+    </div>
+
+    <div class="form-group">
+      <label for="description">Description:</label>
+      <textarea id="description" rows="5" [(ngModel)]="supportTicket.description" required></textarea>
+    </div>
+
+    <div class="form-actions">
+      <button class="back-btn" (click)="previousStep()">Back</button>
+      <button class="next-btn" (click)="nextStep()">Next Step</button>
+    </div>
+  </div>
+
+  <div class="form-step" *ngIf="currentStep === 3 && !successMessage">
+    <h2>Review Your Ticket</h2>
+
+    <div class="review-section">
+      <p><strong>Email:</strong> {{ supportTicket.email }}</p>
+      <p><strong>Title:</strong> {{ supportTicket.title }}</p>
+      <p><strong>Description:</strong></p>
+      <p>{{ supportTicket.description }}</p>
+    </div>
+
+    <div class="form-actions">
+      <button class="back-btn" (click)="previousStep()">Back</button>
+      <button class="submit-btn" [disabled]="isLoading" (click)="submitTicket()">
+        <span *ngIf="!isLoading">Submit Ticket</span>
+        <span *ngIf="isLoading">Sending...</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Optional Error Message -->
+  <div class="error-message" *ngIf="errorMessage">
+    <p>{{ errorMessage }}</p>
+  </div>
+</div>
