@@ -1,0 +1,55 @@
+<div class="tickets-wrapper">
+  <h1>Support Tickets</h1>
+
+  <div class="tickets-grid">
+    <!-- Left: Open Unassigned Tickets -->
+    <div class="ticket-section">
+      <h2>Open Tickets</h2>
+
+      <div *ngIf="loadingOpen" class="loading-indicator">
+        <div class="spinner"></div>
+        <p>Loading open tickets...</p>
+      </div>
+
+      <ng-container *ngIf="!loadingOpen && openTickets.length > 0; else noOpenTickets">
+        <div *ngFor="let ticket of openTickets" class="ticket-card">
+          <h3>{{ ticket.title }}</h3>
+          <p>{{ ticket.description }}</p>
+          <div class="ticket-meta">
+            <span>Created: {{ formatDate(ticket.createdAt) }}</span>
+            <span>Email: {{ ticket.email }}</span>
+          </div>
+        </div>
+      </ng-container>
+
+      <ng-template #noOpenTickets>
+        <p class="empty-state">No open tickets available.</p>
+      </ng-template>
+    </div>
+
+    <!-- Right: My Assigned In-Progress Tickets -->
+    <div class="ticket-section">
+      <h2>My Tickets</h2>
+
+      <div *ngIf="loadingMine" class="loading-indicator">
+        <div class="spinner"></div>
+        <p>Loading your tickets...</p>
+      </div>
+
+      <ng-container *ngIf="!loadingMine && myTickets.length > 0; else noMyTickets">
+        <div *ngFor="let ticket of myTickets" class="ticket-card">
+          <h3>{{ ticket.title }}</h3>
+          <p>{{ ticket.description }}</p>
+          <div class="ticket-meta">
+
+            <span>Status: {{ getLastStatus(ticket.handlingHistory) }}</span>
+          </div>
+        </div>
+      </ng-container>
+
+      <ng-template #noMyTickets>
+        <p class="empty-state">You have no assigned in-progress tickets.</p>
+      </ng-template>
+    </div>
+  </div>
+</div>
