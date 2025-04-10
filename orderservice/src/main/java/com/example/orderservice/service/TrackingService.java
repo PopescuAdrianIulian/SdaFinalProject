@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -21,73 +21,86 @@ import java.util.stream.Collectors;
 public class TrackingService {
 
     @Value("${NOTIFICATION_TOPIC}")
-    private String NOTIFICATION_TOPIC;
+    private String notificationTopic;
     private final ParcelRepository parcelRepository;
     private final KafkaTemplate<String, ParcelResponse> kafkaTemplate;
 
     public ParcelResponse changeDeliveryStatus(String awb, String newStatus) {
-        PackageStatus status;
-        try {
-            status = PackageStatus.valueOf(newStatus.toUpperCase());
-        } catch (IllegalArgumentException e) {
-            log.error("Invalid PackageStatus: {}", newStatus);
-            throw new IllegalArgumentException("Invalid status: " + newStatus);
-        }
-        Parcel tempParcel = parcelRepository.findParcelByAwb(awb).orElseThrow(() ->
-                new RuntimeException("Parcel with AWB " + awb + " not found"));
+        PackageStatus status = getPackageStatus(newStatus);
+        Parcel parcel = findParcelByAwb(awb);
         log.info("Changing the status to {}", status);
-        Map<LocalDateTime, PackageStatus> statusHistory = tempParcel.getStatusHistory();
+        Map<LocalDateTime, PackageStatus> statusHistory = parcel.getStatusHistory();
         statusHistory.put(LocalDateTime.now(), status);
-        tempParcel.setStatusHistory(statusHistory);
-        tempParcel.setStatus(status);
-        tempParcel.setUpdatedAt(LocalDateTime.now());
-        parcelRepository.saveAndFlush(tempParcel);
-        ParcelResponse payload = new ParcelResponse().createParcelResponse(tempParcel);
-        kafkaTemplate.send(NOTIFICATION_TOPIC, payload);
-        log.info("Sending payload for the notification service {}", payload);
+        parcel.setStatusHistory(statusHistory);
+        parcel.setStatus(status);
+        parcel.setUpdatedAt(LocalDateTime.now());
+        parcelRepository.saveAndFlush(parcel);
+
+        ParcelResponse payload = createParcelResponse(parcel);
+        sendNotification(payload);
 
         return payload;
     }
 
     public ParcelResponse setParcelAsDelivered(String awb) {
-        Parcel tempParcel = parcelRepository.findParcelByAwb(awb).orElseThrow();
-        if (tempParcel.isDelivered()) {
-            throw new RuntimeException("Already delivered");
-        }
-        log.info("Parcel is delivered {}", tempParcel.getAwb());
-        log.info("Parcel price is {}", tempParcel.getPrice());
+        Parcel parcel = findParcelByAwb(awb);
 
-        tempParcel.setDelivered(true);
-        tempParcel.setUpdatedAt(LocalDateTime.now());
-        tempParcel.setStatus(PackageStatus.DELIVERED);
-        Map<LocalDateTime, PackageStatus> statusHistory = tempParcel.getStatusHistory();
+        if (parcel.isDelivered()) {
+            throw new RuntimeException("Parcel already delivered");
+        }
+
+        log.info("Parcel is delivered {}", parcel.getAwb());
+        log.info("Parcel price is {}", parcel.getPrice());
+
+        parcel.setDelivered(true);
+        parcel.setUpdatedAt(LocalDateTime.now());
+        parcel.setStatus(PackageStatus.DELIVERED);
+
+        Map<LocalDateTime, PackageStatus> statusHistory = parcel.getStatusHistory();
         statusHistory.put(LocalDateTime.now(), PackageStatus.DELIVERED);
-        parcelRepository.saveAndFlush(tempParcel);
-        ParcelResponse payload = new ParcelResponse().createParcelResponse(tempParcel);
-        kafkaTemplate.send(NOTIFICATION_TOPIC, payload);
-        log.info("Sending payload for the notification service {}", payload);
+        parcelRepository.saveAndFlush(parcel);
+
+        ParcelResponse payload = createParcelResponse(parcel);
+        sendNotification(payload);
+
         return payload;
     }
 
-
     public List<ParcelResponse> getAllParcels() {
-        log.info("Retrieving all Parcels");
-        return parcelRepository.findAll()
-                .stream()
-                .map(parcel -> new ParcelResponse().createParcelResponse(parcel))
+        log.info("Retrieving all parcels");
+        return parcelRepository.findAll().stream()
+                .map(this::createParcelResponse)
                 .toList();
     }
 
     public List<ParcelResponse> getAllUndeliveredParcels() {
-        List<Parcel> parcels = parcelRepository.findAll().stream()
+        log.info("Retrieving all undelivered parcels");
+        return parcelRepository.findAll().stream()
                 .filter(parcel -> parcel.getStatus() != PackageStatus.DELIVERED && parcel.getStatus() != PackageStatus.RETURNED)
-                .collect(Collectors.toList());
-
-        ParcelResponse parcelResponse = new ParcelResponse();
-        return parcels.stream()
-                .map(parcelResponse::createParcelResponse)
+                .map(this::createParcelResponse)
                 .toList();
     }
 
+    private PackageStatus getPackageStatus(String status) {
+        try {
+            return PackageStatus.valueOf(status.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            log.error("Invalid PackageStatus: {}", status);
+            throw new IllegalArgumentException("Invalid status: " + status);
+        }
+    }
 
+    private Parcel findParcelByAwb(String awb) {
+        return parcelRepository.findParcelByAwb(awb)
+                .orElseThrow(() -> new RuntimeException("Parcel with AWB " + awb + " not found"));
+    }
+
+    private ParcelResponse createParcelResponse(Parcel parcel) {
+        return new ParcelResponse().createParcelResponse(parcel);
+    }
+
+    private void sendNotification(ParcelResponse payload) {
+        kafkaTemplate.send(notificationTopic, payload);
+        log.info("Sending payload for the notification service {}", payload);
+    }
 }
