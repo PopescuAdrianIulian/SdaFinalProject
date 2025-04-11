@@ -2,7 +2,7 @@ import {Component} from '@angular/core';
 import {FormsModule} from "@angular/forms";
 import {NgClass, NgIf} from "@angular/common";
 import {SupportTicketService} from "@service/support.service";
-import {SupportTicketRequest} from "../../../model/support.model";
+import {SupportTicketRequest} from "../../../../model/support.model";
 
 @Component({
   selector: 'app-support',

@@ -1,52 +1,39 @@
-import {Component, OnInit} from '@angular/core';
-import {PackageStatus, ParcelResponse} from "../../../model/parcel.model";
-import {CommonModule, NgClass, SlicePipe} from "@angular/common";
-import {ParcelService} from "@service/parcel.service";
-import {TokenDecoderService} from "@service/token.service";
-import {Router} from "@angular/router";
-import {FormsModule} from "@angular/forms";
+import { Component, OnInit } from '@angular/core';
+import { PackageStatus, ParcelResponse } from "../../../../model/parcel.model";
+import { Router } from "@angular/router";
+import { CommonModule } from "@angular/common";
+import { FormsModule } from "@angular/forms";
+import { TrackingService } from "@service/tracking.service";
 
 @Component({
-  selector: 'app-find-parcels',
+  selector: 'app-dashboard',
   standalone: true,
-  imports: [
-    NgClass,
-    SlicePipe,
-    CommonModule,
-    FormsModule
-  ],
-  templateUrl: './find-parcels.component.html',
-  styleUrl: './find-parcels.component.css'
+  imports: [CommonModule, FormsModule],
+  templateUrl: './dashboard.component.html',
+  styleUrls: ['./dashboard.component.css'] // Correct property name for styles
 })
-export class FindParcelsComponent implements OnInit {
+export class DashboardComponent implements OnInit {
+
   parcels: ParcelResponse[] = [];
   loading = true;
   error = '';
   expandedParcelIndex: number | null = null;
-  token: string | null = localStorage.getItem('jwt');
-  email = '';
   selectedSort: string = 'createdDesc';
 
+  packageStatuses: PackageStatus[] = ['OPEN', 'IN_TRANSIT', 'DELIVERED', 'CANCELED'];
+
   constructor(
-    private parcelService: ParcelService,
-    private tokenDecoder: TokenDecoderService,
+    private trackingService: TrackingService,
     private router: Router
-  ) { }
+  ) {}
 
   ngOnInit(): void {
-    if (this.token) {
-      const userEmail = this.tokenDecoder.getUserEmail(this.token);
-      this.email = userEmail ? userEmail : '';
-    } else {
-      console.warn('No token found in localStorage.');
-    }
-
     this.loadParcels();
   }
 
   loadParcels(): void {
     this.loading = true;
-    this.parcelService.getAllParcelsByUser(this.email).subscribe({
+    this.trackingService.getAllUndeliveredParcels().subscribe({
       next: (data) => {
         this.parcels = data;
         this.sortParcels();
@@ -73,7 +60,7 @@ export class FindParcelsComponent implements OnInit {
     const timestamps = Object.keys(statusHistory).sort((a, b) =>
       new Date(b).getTime() - new Date(a).getTime()
     );
-    return timestamps.length > 0 ? statusHistory[timestamps[0]] : 'OPEN';
+    return timestamps.length > 0 ? statusHistory[timestamps[0]] : 'OPEN' as PackageStatus;
   }
 
   getStatusClass(status: PackageStatus): string {
@@ -108,9 +95,37 @@ export class FindParcelsComponent implements OnInit {
     }
   }
 
-  goToSendParcel() {
-    this.router.navigate(['/sendParcel']);
+  protected readonly Object = Object;
+
+  onStatusChange(awb: string, newStatus: PackageStatus): void {
+    const confirmation = confirm(`Are you sure you want to change the status of parcel ${awb} to ${newStatus}?`);
+
+    if (confirmation) {
+      this.trackingService.changeDeliveryStatus(awb, newStatus).subscribe({
+        next: response => {
+          console.log('Status updated', response);
+          this.loadParcels();
+        },
+        error: err => {
+          console.error('Error updating status', err);
+        }
+      });
+    } else {
+      console.log('Status change canceled');
+    }
   }
 
-  protected readonly Object = Object;
+  changeParcelStatus(awb: string): void {
+    const newStatusInput = prompt(`Enter new status for parcel ${awb} (available: ${this.packageStatuses.join(', ')})`);
+    if (newStatusInput && this.packageStatuses.includes(newStatusInput as PackageStatus)) {
+      this.onStatusChange(awb, newStatusInput as PackageStatus);
+    } else {
+      alert('Invalid status provided.');
+    }
+  }
+
+
+  goToSendParcel(): void {
+    this.router.navigate(['/send-parcel']);
+  }
 }

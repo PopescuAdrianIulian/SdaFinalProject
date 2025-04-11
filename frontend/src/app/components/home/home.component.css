@@ -1,17 +1,18 @@
 /* Global reset and base */
-* {
+*,
+*::before,
+*::after {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-body, .container {
+body,
+.container {
   font-family: 'Roboto', sans-serif; /* Custom font */
   line-height: 1.6;
   background-color: #f4f4f4;
   color: #333;
-  margin: 0;
-  padding: 0;
 }
 
 .container {
@@ -22,7 +23,7 @@ body, .container {
 
 /* Header styles */
 .header {
-  background-color: #ffffff;
+  background-color: #fff;
   padding: 1rem 0;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
   position: sticky;
@@ -67,20 +68,14 @@ body, .container {
 }
 
 @keyframes backgroundCycle {
-  0%, 5% {
-    background: url('/assets/images/home1.jpg') no-repeat center center/cover;
-  }
-  25%, 30% {
-    background: url('/assets/images/home1.jpg') no-repeat center center/cover;
-  }
-  50%, 55% {
-    background: url('/assets/images/home1.jpg') no-repeat center center/cover;
-  }
-  75%, 80% {
-    background: url('/assets/images/home1.jpg') no-repeat center center/cover;
-  }
+  0%,
   100% {
-    background: url('/assets/images/home1.jpg') no-repeat center center/cover;
+    background: url('assets/images/home1.jpg') no-repeat center center/cover;
+  }
+  25%,
+  50%,
+  75% {
+    background: url('assets/images/home1.jpg') no-repeat center center/cover;
   }
 }
 
@@ -117,23 +112,27 @@ body, .container {
   animation: fadeIn 1.4s ease-in-out;
 }
 
+/* Form Styles */
 .awb-form {
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
   gap: 0.75rem;
-  max-width: 100%;
   margin-top: 1.5rem;
+}
+
+.awb-form input,
+.awb-form button {
+  border-radius: 6px;
+  font-size: 1rem;
+  outline: none;
+  transition: all 0.3s ease;
 }
 
 .awb-form input {
   padding: 0.9rem 1rem;
   width: 280px;
-  border-radius: 6px;
   border: 1px solid #ccc;
-  font-size: 1rem;
-  outline: none;
-  transition: border-color 0.3s ease;
 }
 
 .awb-form input:focus {
@@ -144,12 +143,9 @@ body, .container {
   padding: 0.9rem 1.4rem;
   background-color: #ff6600; /* Orange button */
   border: none;
-  border-radius: 6px;
   color: white;
   font-weight: 600;
-  font-size: 1rem;
   cursor: pointer;
-  transition: background 0.3s ease, transform 0.2s ease;
 }
 
 .awb-form button:hover {
@@ -162,9 +158,9 @@ body, .container {
   max-width: 800px;
   margin: 3rem auto;
   padding: 2rem;
-  background-color: #ffffff;
+  background-color: #fff;
   border-radius: 12px;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
   animation: fadeInUp 1s ease-in-out;
 }
 
@@ -214,6 +210,7 @@ body, .container {
   font-weight: 700;
   font-size: 1.2rem;
 }
+
 /* Parcel Types Section */
 .parcel-types-container {
   display: flex;
@@ -265,6 +262,7 @@ p {
   color: #FF6F00;
 }
 
+/* Media Queries */
 @media screen and (max-width: 768px) {
   .parcel-types-container {
     flex-direction: column;
@@ -277,6 +275,7 @@ p {
   }
 }
 
+/* Action Image */
 .action-image-container {
   flex: 1;
   min-width: 300px;
@@ -290,7 +289,7 @@ p {
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
 }
 
-
+/* Parcel Details */
 .parcel-details h2 {
   text-align: center;
   margin-bottom: 1.5rem;
@@ -328,6 +327,7 @@ p {
   color: #555;
 }
 
+/* Status History */
 .status-history {
   margin-top: 1.5rem;
 }
@@ -378,7 +378,7 @@ p {
 
 .card:hover {
   transform: translateY(-6px);
-  box-shadow: 0 10px 24px rgba(0,0,0,0.1);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.1);
 }
 
 .card h3 {
@@ -394,8 +394,12 @@ p {
 
 /* Animations */
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 @keyframes fadeInUp {

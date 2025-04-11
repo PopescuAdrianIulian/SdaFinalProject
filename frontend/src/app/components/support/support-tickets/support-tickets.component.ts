@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule, KeyValue } from '@angular/common';
 import { TokenDecoderService } from '@service/token.service';
 import { SupportTicketService } from '@service/support.service';
-import { SupportTicketResponse, TicketStatus } from '../../../model/support.model';
+import { SupportTicketResponse, TicketStatus } from '../../../../model/support.model';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 

@@ -1,6 +1,6 @@
 import {Component} from '@angular/core';
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
-import {ParcelRequest, Size} from "../../../model/parcel.model";
+import {ParcelRequest, Size} from "../../../../model/parcel.model";
 import {CommonModule} from "@angular/common";
 import {ParcelService} from "@service/parcel.service";
 

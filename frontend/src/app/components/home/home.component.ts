@@ -42,7 +42,7 @@ export class HomeComponent {
   }
 
   goToSupport() {
-    this.router.navigate(['/support']);
+    this.router.navigate(['/tickets']);
 
   }
 

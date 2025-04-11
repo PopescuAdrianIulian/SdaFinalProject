@@ -4,7 +4,7 @@ import {ParcelService} from '@service/parcel.service';
 import {TrackingService} from '@service/tracking.service';
 import {NgIf} from '@angular/common';
 import {SupportTicketService} from '@service/support.service';
-import {SupportTicketRequest} from '../../../model/support.model';
+import {SupportTicketRequest} from '../../../../model/support.model';
 
 @Component({
   selector: 'app-return-parcel',

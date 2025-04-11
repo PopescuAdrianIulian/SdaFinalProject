@@ -1,36 +1,35 @@
-/* Ensure the login page fills the viewport minus the header */
 :host {
   display: block;
-  height: 100%;
   width: 100%;
+  min-height: 100%;
   position: relative;
   overflow: hidden;
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Segoe UI', sans-serif;
   color: white;
 }
 
-/* Page wrapper */
-.login-page {
+/* Page container */
+.create-account-page {
   height: 100%;
   width: 100%;
   position: relative;
 }
 
-/* Fullscreen background cycling */
-.login-background {
+/* Background behind everything */
+.create-account-background {
   position: absolute;
   top: 0;
   left: 0;
   height: 100%;
   width: 100%;
   animation: backgroundCycle 50s infinite ease-in-out;
-  background: url('/assets/images/home1.png') no-repeat center center/cover;
+  background: url('assets/images/home1.jpg') no-repeat center center/cover;
   z-index: 0;
   filter: brightness(0.5);
 }
 
-/* Container that centers the login box */
-.login-container {
+/* Container for centering the form */
+.create-account-container {
   position: relative;
   z-index: 1;
   height: 100%;
@@ -41,20 +40,33 @@
   box-sizing: border-box;
 }
 
-/* The login form itself */
-form {
+/* Allow scroll on small screens */
+.create-account-container form {
   background: rgba(56, 59, 67, 0.85);
-  padding: 3rem 2.5rem;
+  padding: 2rem;
   border-radius: 12px;
   width: 100%;
   max-width: 420px;
   text-align: center;
   box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.5);
   backdrop-filter: blur(10px);
-  animation: fadeIn 1s ease-out;
+  box-sizing: border-box;
+  margin: auto 0; /* vertically centers if possible */
 }
 
-/* Title */
+/* Handle cases where form is too tall */
+@media (max-height: 700px) {
+  .create-account-container {
+    align-items: flex-start;
+    overflow-y: auto;
+  }
+
+  .create-account-container form {
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+  }
+}
+
 h2 {
   margin-bottom: 2rem;
   font-size: 2.2rem;
@@ -63,7 +75,6 @@ h2 {
   animation: fadeInTitle 0.8s ease-out;
 }
 
-/* Form Group */
 .form-group {
   margin-bottom: 1.5rem;
   text-align: left;
@@ -95,7 +106,6 @@ input:focus {
   border: 1px solid #ff6600;
 }
 
-/* Buttons */
 button {
   width: 100%;
   padding: 1.1rem;
@@ -130,33 +140,30 @@ button:hover {
   transform: scale(1.05);
 }
 
-/* Error Message */
 .error-message {
   color: #ff4b4b;
   font-size: 1rem;
   margin: 0.5rem 0;
 }
 
-/* Background animation keyframes */
 @keyframes backgroundCycle {
   0%, 5% {
-    background: url('/assets/images/home1.png') no-repeat center center/cover;
+    background: url('assets/images/home1.jpg') no-repeat center center/cover;
   }
   25%, 30% {
-    background: url('/assets/images/home2.png') no-repeat center center/cover;
+    background: url('assets/images/home1.jpg') no-repeat center center/cover;
   }
   50%, 55% {
-    background: url('/assets/images/home3.png') no-repeat center center/cover;
+    background: url('assets/images/home1.jpg') no-repeat center center/cover;
   }
   75%, 80% {
-    background: url('/assets/images/home4.png') no-repeat center center/cover;
+    background: url('assets/images/home1.jpg') no-repeat center center/cover;
   }
   100% {
-    background: url('/assets/images/home1.png') no-repeat center center/cover;
+    background: url('assets/images/home1.jpg') no-repeat center center/cover;
   }
 }
 
-/* Animation for form fade-in */
 @keyframes fadeIn {
   0% {
     opacity: 0;
@@ -168,7 +175,6 @@ button:hover {
   }
 }
 
-/* Animation for title fade-in */
 @keyframes fadeInTitle {
   0% {
     opacity: 0;
