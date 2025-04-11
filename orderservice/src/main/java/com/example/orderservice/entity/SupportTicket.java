@@ -1,8 +1,7 @@
 package com.example.orderservice.entity;
 
-import com.example.orderservice.config.MapJsonConverter;
+import com.example.orderservice.config.MessageHistoryJsonConverter;
 import com.example.orderservice.config.TicketStatusJsonConverter;
-import com.example.orderservice.enums.PackageStatus;
 import com.example.orderservice.enums.TicketStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -34,8 +33,6 @@ public class SupportTicket {
 
     private String assignee;
 
-    private String creator;
-
     @Enumerated(EnumType.STRING)
     private TicketStatus ticketStatus;
 
@@ -43,5 +40,8 @@ public class SupportTicket {
     @Column(columnDefinition = "JSON")
     private Map<LocalDateTime, TicketStatus> handlingHistory;
 
+    @Convert(converter = MessageHistoryJsonConverter.class)
+    @Column(columnDefinition = "JSON")
+    private Map<LocalDateTime, String> messageHistory;
 
 }

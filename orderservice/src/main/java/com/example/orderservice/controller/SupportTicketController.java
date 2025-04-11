@@ -5,7 +5,7 @@ import com.example.orderservice.response.support.SupportTicketResponse;
 import com.example.orderservice.service.SupportTicketService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.boot.model.internal.CreateKeySecondPass;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,29 +24,36 @@ public class SupportTicketController {
     }
 
     @PostMapping("/{id}/{newStatus}")
-    public ResponseEntity<?> updateSupportTicket(@Valid @PathVariable Long id,
-                                                 @PathVariable String newStatus) {
+    public ResponseEntity<?> updateSupportTicketStatus(@Valid @PathVariable Long id,
+                                                       @PathVariable String newStatus) {
         return ResponseEntity.ok(supportTicketService.updateSupportTicketStatus(id, newStatus));
     }
 
-    @GetMapping("/getAll")
-    public ResponseEntity<List<SupportTicketResponse>> getAllUnresolvedTickets() {
-        return ResponseEntity.ok(supportTicketService.getAllUnresolvedTickets());
+    @PostMapping("/message/{id}")
+    public ResponseEntity<Void> addMessagesToSupportTicket(@PathVariable Long id,
+                                                           @RequestBody String message) {
+        supportTicketService.addMessageToSupportTicket(id, message);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @GetMapping("/myTickets/{id}")
-    public ResponseEntity<List<SupportTicketResponse>> getMyTickets(@Valid @PathVariable Long id){
+    public ResponseEntity<List<SupportTicketResponse>> getMyTickets(@Valid @PathVariable Long id) {
         return ResponseEntity.ok(supportTicketService.getMyAssignedTickets(id));
     }
 
     @GetMapping("/openTickets")
-    public ResponseEntity<List<SupportTicketResponse>> getOpenTickets(){
+    public ResponseEntity<List<SupportTicketResponse>> getOpenTickets() {
         return ResponseEntity.ok(supportTicketService.getAllOpenTickets());
     }
 
-    @GetMapping("/myOpenTickets")
-    public ResponseEntity<List<SupportTicketResponse>> getMyAssignedTicketsInProgress(@Valid @PathVariable Long id){
-        return ResponseEntity.ok(supportTicketService.getMyAssignedTicketsInProgress(id));
+    @GetMapping("/supportTicket/{id}")
+    public ResponseEntity<SupportTicketResponse> findSupportTicketById(@PathVariable Long id) {
+        return ResponseEntity.ok(supportTicketService.findSupportTicketById(id));
+    }
+
+    @GetMapping("/getAll/{email}")
+    public ResponseEntity<List<SupportTicketResponse>> getAllTicketsByEmail(@PathVariable String email) {
+        return ResponseEntity.ok(supportTicketService.getAllTicketsByEmail(email));
     }
 
 

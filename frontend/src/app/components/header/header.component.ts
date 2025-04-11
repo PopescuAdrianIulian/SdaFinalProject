@@ -80,8 +80,7 @@ export class HeaderComponent implements OnInit {
 
 
   goToSupport() {
-    this.router.navigate(['/support']);
-
+    this.router.navigate(['/tickets']);
   }
 
   goToProducts() {

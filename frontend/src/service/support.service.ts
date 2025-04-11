@@ -1,7 +1,7 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { SupportTicketRequest, SupportTicketResponse, TicketStatus } from '../model/support.model';
+import {Injectable} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
+import {Observable} from 'rxjs';
+import {SupportTicketRequest, SupportTicketResponse, TicketStatus} from '../model/support.model';
 
 @Injectable({
   providedIn: 'root'
@@ -9,13 +9,14 @@ import { SupportTicketRequest, SupportTicketResponse, TicketStatus } from '../mo
 export class SupportTicketService {
   private apiUrl = 'http://localhost:8080/api/v1/support';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+  }
 
   createSupportTicket(ticketRequest: SupportTicketRequest): Observable<SupportTicketResponse> {
     return this.http.post<SupportTicketResponse>(`${this.apiUrl}/create`, ticketRequest);
   }
 
-  updateSupportTicketStatus(id: number, newStatus: TicketStatus): Observable<SupportTicketResponse> {
+  updateSupportTicketStatus(id: string, newStatus: TicketStatus): Observable<SupportTicketResponse> {
     return this.http.post<SupportTicketResponse>(`${this.apiUrl}/${id}/${newStatus}`, {});
   }
 
@@ -27,11 +28,15 @@ export class SupportTicketService {
     return this.http.get<SupportTicketResponse[]>(`${this.apiUrl}/myTickets/${userId}`);
   }
 
-  getMyOpenTickets(userId: number): Observable<SupportTicketResponse[]> {
-    return this.http.get<SupportTicketResponse[]>(`${this.apiUrl}/myOpenTickets/${userId}`);
+  getTicketById(ticketId: string): Observable<SupportTicketResponse> {
+    return this.http.get<SupportTicketResponse>(`${this.apiUrl}/supportTicket/${ticketId}`);
   }
 
-  getAllUnresolvedTickets(): Observable<SupportTicketResponse[]> {
-    return this.http.get<SupportTicketResponse[]>(`${this.apiUrl}/getAll`);
+  addMessageForSupportTicket(ticketId: string, message: string) {
+    return this.http.post(`${this.apiUrl}/message/${ticketId}`, message);
+  }
+
+  getAllByEmail(email: string ):Observable<SupportTicketResponse[]> {
+    return this.http.get<SupportTicketResponse[]>(`${this.apiUrl}/getAll/${email}`)
   }
 }

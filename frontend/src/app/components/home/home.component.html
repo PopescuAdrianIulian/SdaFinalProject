@@ -88,3 +88,53 @@
     </div>
   </div>
 </section>
+
+
+<section class="quick-actions-section">
+  <div class="actions-and-image">
+    <div class="action-grid-left">
+      <div class="action-button-large" (click)="goToSupport()">
+        <i class="icon">&#9990;</i>
+        <span>Support</span>
+      </div>
+      <div class="action-button-large" (click)="goToInfo()">
+        <i class="icon">&#9993;</i>
+        <span>How to send a parcel?</span>
+      </div>
+      <div class="action-button-large" (click)="goToInfo()">
+        <i class="icon">&#9993;</i>
+        <span>How to pick up the parcel?</span>
+      </div>
+      <div class="action-button-large" (click)="goToReturnParcel()">
+        <i class="icon">&#8635;</i>
+        <span>Return Parcel</span>
+      </div>
+    </div>
+
+    <div class="action-image-container">
+      <img src="assets/images/quick-actions.png" alt="Quick Actions"/>
+    </div>
+  </div>
+</section>
+
+<div class="parcel-types-container">
+  <h2>Parcels type</h2>
+
+  <div class="parcel-box">
+    <h3>Small Parcel S</h3>
+    <p>Max 3 x 37 x 60 cm</p>
+    <p class="price">10$</p>
+  </div>
+
+  <div class="parcel-box">
+    <h3>Medium parcel M</h3>
+    <p>Max 10 x 37 x 60 cm</p>
+    <p class="price">15$</p>
+  </div>
+
+  <div class="parcel-box">
+    <h3>Big Parcel L</h3>
+    <p>Max 20 x 37 x 60 cm</p>
+    <p class="price">20$</p>
+  </div>
+</div>

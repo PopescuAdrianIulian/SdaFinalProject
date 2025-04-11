@@ -28,6 +28,10 @@ public class TrackingService {
     public ParcelResponse changeDeliveryStatus(String awb, String newStatus) {
         PackageStatus status = getPackageStatus(newStatus);
         Parcel parcel = findParcelByAwb(awb);
+
+        if (parcel.getStatus()==status){
+            throw new RuntimeException("Parcel status is the same");
+        }
         log.info("Changing the status to {}", status);
         Map<LocalDateTime, PackageStatus> statusHistory = parcel.getStatusHistory();
         statusHistory.put(LocalDateTime.now(), status);
@@ -100,7 +104,7 @@ public class TrackingService {
     }
 
     private void sendNotification(ParcelResponse payload) {
-//        kafkaTemplate.send(notificationTopic, payload);
+        kafkaTemplate.send(notificationTopic, payload);
         log.info("Sending payload for the notification service {}", payload);
     }
 }

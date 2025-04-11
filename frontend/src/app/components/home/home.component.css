@@ -168,6 +168,129 @@ body, .container {
   animation: fadeInUp 1s ease-in-out;
 }
 
+.quick-actions-section {
+  padding: 4rem 2rem;
+}
+
+.actions-and-image {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 4rem;
+  flex-wrap: wrap;
+}
+
+.action-grid-left {
+  display: grid;
+  grid-template-columns: repeat(2, 300px);
+  gap: 2rem;
+}
+
+.action-button-large {
+  background-color: #fff;
+  border-radius: 16px;
+  padding: 2rem;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.action-button-large:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12);
+}
+
+.action-button-large .icon {
+  font-size: 3rem;
+  color: #ff6600;
+  margin-bottom: 1rem;
+}
+
+.action-button-large span {
+  font-weight: 700;
+  font-size: 1.2rem;
+}
+/* Parcel Types Section */
+.parcel-types-container {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 40px;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.parcel-box {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  text-align: center;
+  width: 30%;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.parcel-box:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+.parcel-icon {
+  width: 60px;
+  height: 60px;
+  margin-bottom: 15px;
+}
+
+h3 {
+  font-size: 20px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+p {
+  color: #555;
+  font-size: 16px;
+}
+
+.price {
+  margin-top: 15px;
+  font-size: 18px;
+  font-weight: bold;
+  color: #FF6F00;
+}
+
+@media screen and (max-width: 768px) {
+  .parcel-types-container {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .parcel-box {
+    width: 80%;
+    margin-bottom: 20px;
+  }
+}
+
+.action-image-container {
+  flex: 1;
+  min-width: 300px;
+  text-align: center;
+}
+
+.action-image-container img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+}
+
+
 .parcel-details h2 {
   text-align: center;
   margin-bottom: 1.5rem;

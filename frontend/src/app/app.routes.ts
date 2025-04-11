@@ -5,8 +5,10 @@ import {CreateAccountComponent} from './components/create-account/create-account
 import {SendParcelComponent} from "./components/send-parcel/send-parcel.component";
 import {FindParcelsComponent} from "./components/find-parcels/find-parcels.component";
 import {DashboardComponent} from "./components/courier-dashboard/dashboard.component";
-import {SupportComponent} from "./components/support/support.component";
+import {SupportComponent} from "./components/add-support-ticket/support.component";
 import {SupportTicketsComponent} from "./components/support-tickets/support-tickets.component";
+import {InfoComponent} from "./components/info/info.component";
+import {ReturnParcelComponent} from "./components/return-parcel/return-parcel.component";
 
 
 export const routes: Routes = [
@@ -17,8 +19,10 @@ export const routes: Routes = [
   {path: 'sendParcel', component: SendParcelComponent},
   {path: 'myParcels', component: FindParcelsComponent},
   {path: 'dashboard', component: DashboardComponent},
-  {path: 'support', component: SupportComponent},
+  {path: 'add-support', component: SupportComponent},
   {path: 'tickets', component: SupportTicketsComponent},
+  {path: 'info', component: InfoComponent},
+  {path: 'returnParcel', component: ReturnParcelComponent},
 
 
 ];

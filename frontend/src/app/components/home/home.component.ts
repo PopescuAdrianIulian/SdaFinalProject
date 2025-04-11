@@ -41,4 +41,17 @@ export class HomeComponent {
     return `${date.toLocaleDateString()} ${date.toLocaleTimeString()}`;
   }
 
+  goToSupport() {
+    this.router.navigate(['/support']);
+
+  }
+
+  goToReturnParcel() {
+    this.router.navigate(['/returnParcel']);
+
+  }
+
+  goToInfo() {
+    this.router.navigate(['/info']);
+  }
 }

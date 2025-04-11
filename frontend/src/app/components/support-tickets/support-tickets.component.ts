@@ -1,26 +1,32 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, KeyValue } from '@angular/common';
 import { TokenDecoderService } from '@service/token.service';
-import {SupportTicketService} from "@service/support.service";
-import { SupportTicketResponse } from '../../../model/support.model';
+import { SupportTicketService } from '@service/support.service';
+import { SupportTicketResponse, TicketStatus } from '../../../model/support.model';
+import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-support-tickets',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './support-tickets.component.html',
   styleUrls: ['./support-tickets.component.scss']
 })
 export class SupportTicketsComponent implements OnInit {
   openTickets: SupportTicketResponse[] = [];
   myTickets: SupportTicketResponse[] = [];
-
   loadingOpen = false;
   loadingMine = false;
-
   currentUserId: number | null = null;
+  currentUserRole: string | null = '';
+  currentUserEmail: string | null = '';
+  selectedTicket: SupportTicketResponse | null = null;
+  newMessage: string = '';
+  ticketStatuses: TicketStatus[] = ['OPEN', 'RESOLVED'];
 
   constructor(
+    private router: Router,
     private supportTicketService: SupportTicketService,
     private tokenDecode: TokenDecoderService
   ) {}
@@ -29,27 +35,30 @@ export class SupportTicketsComponent implements OnInit {
     const token = localStorage.getItem('jwt');
     if (token) {
       this.currentUserId = this.tokenDecode.getUserId(token);
+      this.currentUserRole = this.tokenDecode.getUserType(token);
+      this.currentUserEmail = this.tokenDecode.getUserEmail(token);
     }
 
-    this.loadOpenTickets();
+    if (this.currentUserRole === 'ADMIN') {
+      this.loadOpenTickets();
+      if (this.currentUserId !== null) {
+        this.loadMyTickets();
+      }
+    }
 
-    if (this.currentUserId !== null) {
-      this.loadMyTickets();
-    } else {
-      console.warn('User ID not found in token');
+    if (this.currentUserRole === 'USER') {
+      this.loadUserTicketsByEmail();
     }
   }
 
   loadOpenTickets(): void {
     this.loadingOpen = true;
     this.supportTicketService.getOpenTickets().subscribe({
-      next: (tickets: SupportTicketResponse[]) => {
-        console.log('Open tickets:', tickets);
+      next: (tickets) => {
         this.openTickets = tickets;
         this.loadingOpen = false;
       },
-      error: (err: any) => {
-        console.error('Error fetching open tickets', err);
+      error: () => {
         this.loadingOpen = false;
       }
     });
@@ -60,15 +69,71 @@ export class SupportTicketsComponent implements OnInit {
 
     this.loadingMine = true;
     this.supportTicketService.getMyTickets(this.currentUserId).subscribe({
-      next: (tickets: SupportTicketResponse[]) => {
+      next: (tickets) => {
         this.myTickets = tickets;
         this.loadingMine = false;
       },
-      error: (err: any) => {
-        console.error('Error fetching my tickets', err);
+      error: () => {
         this.loadingMine = false;
       }
     });
+  }
+
+  loadUserTicketsByEmail(): void {
+    if (!this.currentUserEmail) return;
+
+    this.loadingMine = true;
+    this.supportTicketService.getAllByEmail(this.currentUserEmail).subscribe({
+      next: (tickets) => {
+        this.myTickets = tickets;
+        this.loadingMine = false;
+      },
+      error: () => {
+        this.loadingMine = false;
+      }
+    });
+  }
+
+  selectTicket(ticket: SupportTicketResponse): void {
+    this.selectedTicket = ticket;
+    this.newMessage = '';
+  }
+  submitMessage(): void {
+    if (this.selectedTicket && this.newMessage.trim()) {
+      this.supportTicketService
+        .addMessageForSupportTicket(String(this.selectedTicket.id), this.newMessage)
+        .subscribe({
+          next: () => {
+            this.reloadSelectedTicket();
+            this.newMessage = '';
+          },
+          error: (err: any) => {
+            console.error('Error sending message', err);
+          }
+        });
+    }
+  }
+
+  reloadSelectedTicket(): void {
+    if (this.selectedTicket) {
+      this.supportTicketService.getTicketById(this.selectedTicket.id).subscribe({
+        next: (ticket) => {
+          this.selectedTicket = ticket;
+        }
+      });
+    }
+  }
+
+  updateTicketStatus(ticket: SupportTicketResponse, newStatus: TicketStatus): void {
+    this.supportTicketService.updateSupportTicketStatus(ticket.id, newStatus).subscribe({
+      next: () => {
+        this.reloadSelectedTicket();
+      }
+    });
+  }
+
+  sortByTimestamp(a: KeyValue<string, string>, b: KeyValue<string, string>): number {
+    return a.key.localeCompare(b.key);
   }
 
   formatDate(dateString: string): string {
@@ -76,12 +141,15 @@ export class SupportTicketsComponent implements OnInit {
     return date.toLocaleString();
   }
 
-  getLastStatus(history: { [timestamp: string]: string }): string {
-   if (!history || Object.keys(history).length === 0) return 'No History';
+  isAdmin(): boolean {
+    return this.currentUserRole === 'ADMIN';
+  }
 
-     const latestTimestamp = Object.keys(history).sort().reverse()[0];
-     const currentStatus = history[latestTimestamp];
+  isUser(): boolean {
+    return this.currentUserRole === 'USER';
+  }
 
-     return currentStatus || 'Unknown';
+  onAddTicket(): void {
+    this.router.navigate(['/add-support']);
   }
 }

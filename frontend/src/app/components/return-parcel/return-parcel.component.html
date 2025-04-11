@@ -1,0 +1,77 @@
+<div class="return-parcel-container">
+  <h2>Return Parcel</h2>
+
+  <form (ngSubmit)="onSubmit()" #returnParcelForm="ngForm">
+    <!-- Email and AWB Number Field -->
+    <div class="form-group row">
+      <div class="col-md-6">
+        <label for="email">Email:</label>
+        <input
+          type="email"
+          id="email"
+          name="email"
+          class="form-control"
+          [(ngModel)]="email"
+          required
+          #emailControl="ngModel"
+        />
+        <div *ngIf="emailSubmitted && emailControl.invalid" class="error">
+          Please provide a valid email address.
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <label for="awbNumber">Parcel AWB Number:</label>
+        <input
+          type="text"
+          id="awbNumber"
+          name="awbNumber"
+          class="form-control"
+          [(ngModel)]="awbNumber"
+          required
+          #awbNumberControl="ngModel"
+          (ngModelChange)="onAwbNumberChange()"
+        />
+        <div *ngIf="awbNumberSubmitted && awbNumberControl.invalid" class="error">
+          AWB number is required and must be valid.
+        </div>
+      </div>
+    </div>
+
+    <!-- Return Reason (Visible if AWB is valid) -->
+    <div *ngIf="isAwbValid">
+      <div class="form-group">
+        <label for="returnReason">Reason for Return:</label>
+        <textarea
+          id="returnReason"
+          name="returnReason"
+          class="form-control"
+          [(ngModel)]="returnReason"
+          required
+          #returnReasonControl="ngModel"
+        ></textarea>
+        <div *ngIf="awbNumberSubmitted && returnReasonControl.invalid" class="error">
+          Return reason is required.
+        </div>
+      </div>
+    </div>
+
+    <!-- Submit Button -->
+    <button
+      type="submit"
+      class="submit-btn"
+    >
+      Submit Return
+    </button>
+
+    <!-- Error for Invalid AWB Number -->
+    <div *ngIf="awbNumberSubmitted && !isAwbValid" class="error">
+      Invalid AWB number. Please try again.
+    </div>
+
+    <!-- Success Message -->
+    <div *ngIf="isSubmitted" class="success">
+      Your return request has been successfully submitted. We will process it shortly.
+    </div>
+  </form>
+</div>

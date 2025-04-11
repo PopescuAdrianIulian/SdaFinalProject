@@ -1,0 +1,116 @@
+/* General Styles */
+.info-page {
+  max-width: 1200px;
+  margin: 40px auto;
+  padding: 0 20px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #333;
+}
+
+/* Titles */
+.main-title {
+  text-align: center;
+  font-size: 2.8rem;
+  margin-bottom: 50px;
+  color: #e67e22; /* orange */
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+/* Info Blocks */
+.info-block {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 30px;
+  margin-bottom: 80px;
+}
+
+.info-block.reverse {
+  flex-direction: row-reverse;
+}
+
+/* Text Content */
+.info-text {
+  flex: 1;
+  min-width: 320px;
+}
+
+.info-text h2 {
+  font-size: 2rem;
+  color: #e67e22;
+  margin-bottom: 20px;
+}
+
+.info-text p {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  margin-bottom: 15px;
+}
+
+.info-text ul {
+  padding-left: 20px;
+  list-style-type: disc;
+  margin-bottom: 15px;
+}
+
+.info-text li {
+  line-height: 1.5;
+  margin-bottom: 10px;
+}
+
+/* Image Styling */
+.info-image {
+  flex: 1;
+  text-align: center;
+}
+
+.info-image img {
+  max-width: 100%;
+  border-radius: 12px;
+  border: 3px solid #f39c12;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Support Section */
+.support-section {
+  text-align: center;
+  margin-top: 40px;
+  padding-top: 20px;
+  border-top: 2px solid #f39c12;
+}
+
+.support-section p {
+  font-size: 1.2rem;
+  margin-bottom: 15px;
+}
+
+.support-btn {
+  background-color: #e67e22;
+  color: #fff;
+  border: none;
+  padding: 12px 26px;
+  font-size: 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.support-btn:hover {
+  background-color: #cf711f;
+}
+
+/* Responsive Styles */
+@media screen and (max-width: 768px) {
+  .info-block,
+  .info-block.reverse {
+    flex-direction: column;
+  }
+
+  .main-title {
+    font-size: 2.2rem;
+  }
+
+  .info-text h2 {
+    font-size: 1.6rem;
+  }
+}

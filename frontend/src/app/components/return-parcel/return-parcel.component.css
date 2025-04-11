@@ -1,0 +1,159 @@
+/* General Body Styling */
+body {
+  font-family: 'Roboto', sans-serif;
+  background-color: #f4f7fc;
+  margin: 0;
+  padding: 0;
+}
+
+/* Main Form Container */
+.return-parcel-container {
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 30px;
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  animation: fadeIn 0.8s ease-in-out;
+}
+
+/* Title */
+.return-parcel-container h2 {
+  text-align: center;
+  font-size: 26px;
+  color: #333;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+
+/* Form Styling */
+.form-group {
+  margin-bottom: 25px;
+}
+
+label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: #555;
+}
+
+/* Input Fields */
+input[type="text"],
+input[type="email"],
+textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-sizing: border-box;
+  transition: border-color 0.3s ease;
+  resize: vertical;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+textarea:focus {
+  border-color: #FF6F00; /* Orange */
+  box-shadow: 0 0 5px rgba(255, 127, 0, 0.3);
+}
+
+/* Error Message */
+.error {
+  color: #ff3b30;
+  font-size: 13px;
+  margin-top: 5px;
+}
+
+/* Submit Button Styling */
+.submit-btn {
+  background-color: #FF6F00; /* Orange */
+  color: white;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 5px;
+  font-size: 18px;
+  cursor: pointer;
+  width: 100%;
+  margin-top: 20px;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+/* Submit Button Hover Effect */
+.submit-btn:hover {
+  background-color: #e65100;
+  transform: scale(1.05);
+}
+
+/* Success Message */
+.success {
+  margin-top: 20px;
+  padding: 15px;
+  background-color: #e0ffe0;
+  border: 1px solid #8bc34a;
+  color: #2e7d32;
+  border-radius: 8px;
+  font-weight: bold;
+  text-align: center;
+}
+
+/* Progress Bar Styling */
+.progress-bar {
+  display: flex;
+  margin-bottom: 30px;
+  justify-content: space-between;
+  padding: 0 10px;
+}
+
+.progress-step {
+  flex: 1;
+  text-align: center;
+  padding: 12px;
+  background-color: #e0e0e0;
+  border-radius: 4px;
+  margin: 0 5px;
+  opacity: 0.5;
+  transition: background-color 0.3s ease;
+}
+
+.progress-step.active {
+  background-color: #FF6F00; /* Orange */
+  color: white;
+  opacity: 1;
+}
+
+/* Form Section Slide-In Animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* Responsive Layout */
+@media (max-width: 768px) {
+  .form-group {
+    margin-bottom: 15px;
+  }
+
+  .return-parcel-container {
+    padding: 20px;
+  }
+
+  .submit-btn {
+    width: 100%;
+  }
+}
