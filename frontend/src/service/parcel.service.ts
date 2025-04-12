@@ -23,4 +23,10 @@ export class ParcelService {
   getAllParcelsByUser(email: string): Observable<ParcelResponse[]> {
     return this.http.get<ParcelResponse[]>(`${this.baseUrl}/allParcels/${email}`);
   }
+
+  downloadParcelLabel(awb: string) {
+    return this.http.get(`${this.baseUrl}/label/${awb}`, {
+      responseType: 'blob'
+    });
+  }
 }

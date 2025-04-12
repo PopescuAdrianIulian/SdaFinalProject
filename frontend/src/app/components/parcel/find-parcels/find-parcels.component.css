@@ -118,7 +118,20 @@ h1:hover {
   transform: translateY(-5px);
   box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.15);
 }
+.download-button {
+  padding: 8px 12px;
+  background-color: #FF6F00;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: background-color 0.3s ease;
+}
 
+.download-button:hover {
+  background-color: #FF6F00;
+}
 .parcel-summary {
   display: flex;
   justify-content: space-between;

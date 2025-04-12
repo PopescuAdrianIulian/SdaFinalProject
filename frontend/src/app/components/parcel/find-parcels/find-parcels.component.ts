@@ -113,4 +113,18 @@ export class FindParcelsComponent implements OnInit {
   }
 
   protected readonly Object = Object;
+
+  downloadLabel(awb: string) {
+    this.parcelService.downloadParcelLabel(awb).subscribe(blob => {
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `parcel-label-${awb}.pdf`;
+      a.click();
+      window.URL.revokeObjectURL(url);
+    }, error => {
+      console.error('Error downloading label:', error);
+      alert('Could not download label. Please try again later.');
+    });
+  }
 }

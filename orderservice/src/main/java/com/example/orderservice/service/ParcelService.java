@@ -93,7 +93,7 @@ public class ParcelService {
                 .toList();
     }
 
-    public ParcelResponse getParcelStatusByAwb(String awb) {
+    public ParcelResponse getParcelByAwb(String awb) {
         Parcel parcel = parcelRepository.findParcelByAwb(awb)
                 .orElseThrow(() -> new RuntimeException("Parcel not found for AWB: " + awb));
         ParcelResponse parcelResponse = new ParcelResponse();
