@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -50,7 +49,7 @@ public class ParcelService {
         parcelRepository.save(parcel);
 
         ParcelResponse payload = new ParcelResponse().createParcelResponse(parcel);
-//        kafkaTemplate.send(NOTIFICATION_TOPIC, payload);
+        kafkaTemplate.send(NOTIFICATION_TOPIC, payload);
         log.info("Parcel created with AWB: {}", awb);
         return payload;
     }
@@ -100,7 +99,6 @@ public class ParcelService {
         ParcelResponse parcelResponse = new ParcelResponse();
         return parcelResponse.createParcelResponse(parcel);
     }
-
 
 
 }

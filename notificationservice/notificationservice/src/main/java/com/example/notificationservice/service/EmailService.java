@@ -1,7 +1,9 @@
 package com.example.notificationservice.service;
 
 import com.example.notificationservice.enums.PackageStatus;
+import com.example.notificationservice.enums.TicketStatus;
 import com.example.orderservice.response.parcel.ParcelResponse;
+import com.example.orderservice.response.support.SupportTicketResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -29,7 +31,7 @@ public class EmailService {
         mailSender.send(message);
     }
 
-    public String createBody(ParcelResponse payload) {
+    public String createBodyForParcel(ParcelResponse payload) {
         StringBuilder sb = new StringBuilder();
 
         sb.append("We are pleased to provide you with an update on your package. Below are the details of your shipment:\n\n");
@@ -67,9 +69,52 @@ public class EmailService {
         sb.append("\nIf you have any questions or need further assistance, please contact our support team.\n\n");
         sb.append("Thank you for choosing our service!\n\n");
         sb.append("Best regards,\n");
-        sb.append("Your Company Name\n");
+        sb.append("QickShip\n");
 
         return sb.toString();
     }
+
+    public String createBodyForSupportTicket(SupportTicketResponse ticket) {
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("Hello,\n\n");
+        sb.append("Here are the details and current status of your support ticket:\n\n");
+
+        sb.append("Ticket Information:\n");
+        sb.append(" - Title: ").append(ticket.getTitle()).append("\n");
+        sb.append(" - Description: ").append(ticket.getDescription()).append("\n");
+        sb.append(" - Email: ").append(ticket.getEmail()).append("\n");
+        sb.append(" - Created At: ").append(ticket.getCreatedAt()).append("\n");
+        sb.append(" - Current Status: ").append(ticket.getTicketStatus()).append("\n\n");
+
+        sb.append("Handling History:\n");
+        Map<LocalDateTime, TicketStatus> handlingHistory = ticket.getHandlingHistory();
+        if (handlingHistory != null && !handlingHistory.isEmpty()) {
+            for (Map.Entry<LocalDateTime, TicketStatus> entry : handlingHistory.entrySet()) {
+                sb.append(" - ").append(entry.getKey()).append(": ").append(entry.getValue()).append("\n");
+            }
+        } else {
+            sb.append(" No status updates yet.\n");
+        }
+
+        sb.append("\nMessage History:\n");
+        Map<LocalDateTime, String> messageHistory = ticket.getMessageHistory();
+        if (messageHistory != null && !messageHistory.isEmpty()) {
+            for (Map.Entry<LocalDateTime, String> entry : messageHistory.entrySet()) {
+                sb.append(" - ").append(entry.getKey()).append(": ").append(entry.getValue()).append("\n");
+            }
+        } else {
+            sb.append(" No messages yet.\n");
+        }
+
+        sb.append("\nThank you for reaching out to our support team.\n");
+        sb.append("We'll continue to keep you informed regarding any updates.\n\n");
+
+        sb.append("Best regards,\n");
+        sb.append("QickShip\n");
+
+        return sb.toString();
+    }
+
 }
 

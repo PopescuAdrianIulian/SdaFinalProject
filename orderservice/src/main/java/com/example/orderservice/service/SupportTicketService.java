@@ -8,6 +8,7 @@ import com.example.orderservice.request.support.SupportTicketRequest;
 import com.example.orderservice.response.support.SupportTicketResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -23,27 +24,33 @@ public class SupportTicketService {
 
     private final SupportTicketRepository supportTicketRepository;
     private final UserRepository userRepository;
+    private final KafkaTemplate<String, SupportTicketResponse> kafkaTemplate;
 
-    public SupportTicket createSupportTicket(SupportTicketRequest ticketRequest) {
+    public SupportTicketResponse createSupportTicket(SupportTicketRequest ticketRequest) {
         LocalDateTime now = LocalDateTime.now();
-
         SupportTicket supportTicket = ticketRequest.createSupportTicket(ticketRequest);
         supportTicket.setHandlingHistory(Map.of(now, TicketStatus.OPEN));
         supportTicket.setMessageHistory(Map.of(now, ticketRequest.getDescription()));
 
-        return supportTicketRepository.save(supportTicket);
+        SupportTicketResponse payload = new SupportTicketResponse().createSupportTicketResponse(supportTicket);
+        kafkaTemplate.send("support-notification", payload);
+        log.info("Notification sent to kafka support {}", payload);
+        supportTicketRepository.save(supportTicket);
+        return payload;
     }
 
-    public SupportTicket updateSupportTicketStatus(Long id, String newStatus) {
+    public SupportTicketResponse updateSupportTicketStatus(Long id, String newStatus) {
         TicketStatus status = parseStatus(newStatus);
-        SupportTicket ticket = findTicketById(id);
+        SupportTicket supportTicket = findTicketById(id);
 
-        if (!ticket.getTicketStatus().equals(TicketStatus.RESOLVED)) {
-            ticket.setTicketStatus(status);
-            supportTicketRepository.saveAndFlush(ticket);
+        if (!supportTicket.getTicketStatus().equals(TicketStatus.RESOLVED)) {
+            supportTicket.setTicketStatus(status);
+            supportTicketRepository.saveAndFlush(supportTicket);
         }
 
-        return ticket;
+        SupportTicketResponse payload = new SupportTicketResponse().createSupportTicketResponse(supportTicket);
+        kafkaTemplate.send("support-notification", payload);
+        return payload;
     }
 
     public List<SupportTicketResponse> getAllOpenTickets() {

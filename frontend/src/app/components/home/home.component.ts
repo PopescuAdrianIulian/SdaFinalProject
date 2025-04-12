@@ -54,4 +54,9 @@ export class HomeComponent {
   goToInfo() {
     this.router.navigate(['/info']);
   }
+
+  goToSendParcel() {
+    this.router.navigate(['/sendParcel']);
+
+  }
 }

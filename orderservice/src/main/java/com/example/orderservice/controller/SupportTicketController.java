@@ -19,13 +19,13 @@ public class SupportTicketController {
     private final SupportTicketService supportTicketService;
 
     @PostMapping("/create")
-    public ResponseEntity<?> createSupportTicket(@Valid @RequestBody SupportTicketRequest ticketRequest) {
+    public ResponseEntity<SupportTicketResponse> createSupportTicket(@Valid @RequestBody SupportTicketRequest ticketRequest) {
         return ResponseEntity.ok(supportTicketService.createSupportTicket(ticketRequest));
     }
 
     @PostMapping("/{id}/{newStatus}")
-    public ResponseEntity<?> updateSupportTicketStatus(@Valid @PathVariable Long id,
-                                                       @PathVariable String newStatus) {
+    public ResponseEntity<SupportTicketResponse> updateSupportTicketStatus(@Valid @PathVariable Long id,
+                                                                           @PathVariable String newStatus) {
         return ResponseEntity.ok(supportTicketService.updateSupportTicketStatus(id, newStatus));
     }
 
