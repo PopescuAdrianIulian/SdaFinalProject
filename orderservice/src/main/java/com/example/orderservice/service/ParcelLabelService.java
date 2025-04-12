@@ -5,19 +5,8 @@ import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
-import com.itextpdf.io.image.ImageDataFactory;
-import com.itextpdf.kernel.colors.ColorConstants;
-import com.itextpdf.kernel.pdf.PdfDocument;
-import com.itextpdf.kernel.pdf.PdfWriter;
-import com.itextpdf.layout.Document;
-import com.itextpdf.layout.Style;
-import com.itextpdf.layout.element.Cell;
-import com.itextpdf.layout.element.Image;
-import com.itextpdf.layout.element.Paragraph;
-import com.itextpdf.layout.element.Table;
-import com.itextpdf.layout.properties.HorizontalAlignment;
-import com.itextpdf.layout.properties.TextAlignment;
-import com.itextpdf.layout.properties.UnitValue;
+import com.itextpdf.text.*;
+import com.itextpdf.text.pdf.*;
 import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayOutputStream;
@@ -28,75 +17,74 @@ public class ParcelLabelService {
 
     public byte[] generateLabel(ParcelResponse parcel) throws Exception {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        PdfWriter writer = new PdfWriter(outputStream);
-        PdfDocument pdf = new PdfDocument(writer);
-        Document document = new Document(pdf);
 
-        document.add(new Paragraph("Parcel Shipment Invoice")
-                .setFontSize(20)
-                .setBold()
-                .setTextAlignment(TextAlignment.CENTER)
-                .setMarginBottom(20));
+        Document document = new Document(PageSize.A4);
+        PdfWriter writer = PdfWriter.getInstance(document, outputStream);
+        document.open();
 
-        document.add(new Paragraph("QickShip Logistics Mock").setBold().setFontSize(12));
-        document.add(new Paragraph("www.qickship.ro | support@qickship.ro\n").setFontSize(10).setMarginBottom(15));
+        Paragraph title = new Paragraph("Parcel Shipment Invoice", new Font(Font.FontFamily.HELVETICA, 20, Font.BOLD));
+        title.setAlignment(Element.ALIGN_CENTER);
+        title.setSpacingAfter(20);
+        document.add(title);
 
-        Table table = new Table(UnitValue.createPercentArray(new float[]{30, 70}))
-                .useAllAvailableWidth()
-                .setMarginBottom(20);
+        document.add(new Paragraph("QickShip Logistics Mock", new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD)));
+        document.add(new Paragraph("www.qickship.ro | support@qickship.ro", new Font(Font.FontFamily.HELVETICA, 10)));
 
-        Style labelStyle = new Style()
-                .setBold()
-                .setFontSize(11)
-                .setBackgroundColor(ColorConstants.LIGHT_GRAY)
-                .setPadding(5);
+        Paragraph space = new Paragraph("\n");
+        space.setSpacingAfter(15);
+        document.add(space);
 
-        table.addCell(new Cell().add(new Paragraph("AWB")).addStyle(labelStyle));
-        table.addCell(new Cell().add(new Paragraph(parcel.getAwb())));
+        PdfPTable table = new PdfPTable(2);
+        table.setWidths(new float[]{1, 3});
+        table.setWidthPercentage(100);
 
-        table.addCell(new Cell().add(new Paragraph("Size")).addStyle(labelStyle));
-        table.addCell(new Cell().add(new Paragraph(parcel.getSize().toString())));
+        Font labelFont = new Font(Font.FontFamily.HELVETICA, 11, Font.BOLD);
+        PdfPCell labelCell = new PdfPCell(new Phrase("AWB", labelFont));
+        labelCell.setBackgroundColor(BaseColor.LIGHT_GRAY);
+        labelCell.setPadding(5);
+        table.addCell(labelCell);
+        table.addCell(parcel.getAwb());
 
-        table.addCell(new Cell().add(new Paragraph("Weight")).addStyle(labelStyle));
-        table.addCell(new Cell().add(new Paragraph(parcel.getWeight() + " kg")));
+        table.addCell(new PdfPCell(new Phrase("Size", labelFont)));
+        table.addCell(parcel.getSize().toString());
 
-        table.addCell(new Cell().add(new Paragraph("Fragile")).addStyle(labelStyle));
-        table.addCell(new Cell().add(new Paragraph(parcel.isFragile() ? "Yes" : "No")));
+        table.addCell(new PdfPCell(new Phrase("Weight", labelFont)));
+        table.addCell(parcel.getWeight() + " kg");
 
-        table.addCell(new Cell().add(new Paragraph("Price")).addStyle(labelStyle));
-        table.addCell(new Cell().add(new Paragraph(String.format("%.2f $", parcel.getPrice()))));
+        table.addCell(new PdfPCell(new Phrase("Fragile", labelFont)));
+        table.addCell(parcel.isFragile() ? "Yes" : "No");
 
-        table.addCell(new Cell().add(new Paragraph("Destination")).addStyle(labelStyle));
-        table.addCell(new Cell().add(new Paragraph(parcel.getDestinationAddress())));
+        table.addCell(new PdfPCell(new Phrase("Price", labelFont)));
+        table.addCell(String.format("%.2f $", parcel.getPrice()));
 
-        table.addCell(new Cell().add(new Paragraph("Receiver")).addStyle(labelStyle));
-        table.addCell(new Cell().add(new Paragraph(parcel.getDestinationContact())));
+        table.addCell(new PdfPCell(new Phrase("Destination", labelFont)));
+        table.addCell(parcel.getDestinationAddress());
 
-        table.addCell(new Cell().add(new Paragraph("Phone")).addStyle(labelStyle));
-        table.addCell(new Cell().add(new Paragraph(parcel.getDestinationPhone())));
+        table.addCell(new PdfPCell(new Phrase("Receiver", labelFont)));
+        table.addCell(parcel.getDestinationContact());
 
-        table.addCell(new Cell().add(new Paragraph("Receiver Email")).addStyle(labelStyle));
-        table.addCell(new Cell().add(new Paragraph(parcel.getDestinationEmail())));
+        table.addCell(new PdfPCell(new Phrase("Phone", labelFont)));
+        table.addCell(parcel.getDestinationPhone());
 
-        table.addCell(new Cell().add(new Paragraph("Sender Email")).addStyle(labelStyle));
-        table.addCell(new Cell().add(new Paragraph(parcel.getEmail())));
+        table.addCell(new PdfPCell(new Phrase("Receiver Email", labelFont)));
+        table.addCell(parcel.getDestinationEmail());
 
+        table.addCell(new PdfPCell(new Phrase("Sender Email", labelFont)));
+        table.addCell(parcel.getEmail());
 
         document.add(table);
 
-        Image qrCodeImage = new Image(ImageDataFactory.create(generateQRCode(parcel.getAwb())));
-        qrCodeImage.setWidth(100);
-        qrCodeImage.setHeight(100);
-        qrCodeImage.setHorizontalAlignment(HorizontalAlignment.RIGHT);
-        document.add(new Paragraph("Scan for tracking").setFontSize(10));
+        Image qrCodeImage = Image.getInstance(generateQRCode(parcel.getAwb()));
+        qrCodeImage.scaleToFit(100, 100);
+        qrCodeImage.setAlignment(Image.ALIGN_RIGHT);
+        document.add(new Paragraph("Scan for tracking", new Font(Font.FontFamily.HELVETICA, 10)));
         document.add(qrCodeImage);
 
-        document.add(new Paragraph("\nGenerated by QickShip • " + LocalDateTime.now())
-                .setFontSize(8)
-                .setTextAlignment(TextAlignment.CENTER)
-                .setMarginTop(30));
+        document.add(new Paragraph("\nGenerated by QickShip • " + LocalDateTime.now(), new Font(Font.FontFamily.HELVETICA, 8)));
+        document.add(new Paragraph("\n"));
 
         document.close();
+
         return outputStream.toByteArray();
     }
 
