@@ -17,14 +17,40 @@ export const routes: Routes = [
   {path: 'home', component: HomeComponent},
   {path: 'login', component: LoginComponent},
   {path: 'createAccount', component: CreateAccountComponent},
-  {path: 'sendParcel', component: SendParcelComponent},
-  {path: 'myParcels', component: FindParcelsComponent},
-  {path: 'dashboard', component: DashboardComponent},
+
+// USER
+  {
+      path: 'sendParcel',
+      component: SendParcelComponent,
+      canActivate: [AuthGuard],
+      data: { expectedRole: 'USER' }
+    },
+
+    {
+      path: 'myParcels',
+      component: FindParcelsComponent,
+      canActivate: [AuthGuard],
+      data: { expectedRole: 'USER' }
+    },
+
+  {
+    path: 'dashboard',
+    component: DashboardComponent,
+    canActivate: [AuthGuard],
+    data: { expectedRole: 'COURIER' }
+  },
+
   {path: 'add-support', component: SupportComponent},
   {path: 'tickets', component: SupportTicketsComponent},
   {path: 'info', component: InfoComponent},
   {path: 'returnParcel', component: ReturnParcelComponent},
-  {path: 'admin-dashboard', component: AdminDashboardComponent},
+
+  {
+    path: 'admin-dashboard',
+    component: AdminDashboardComponent,
+    canActivate: [AuthGuard],
+    data: { expectedRole: 'ADMIN' }
+  },
 
 
 ];

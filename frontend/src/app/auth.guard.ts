@@ -19,7 +19,7 @@ export class AuthGuard implements CanActivate {
 
     // If no token or role doesn't match the expected, redirect to login
     if (!token || userRole !== expectedRole) {
-      this.router.navigate(['/login']);
+      this.router.navigate(['/home']);
       return false;
     }
 
