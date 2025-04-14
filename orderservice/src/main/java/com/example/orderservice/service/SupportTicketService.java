@@ -33,7 +33,7 @@ public class SupportTicketService {
         supportTicket.setMessageHistory(Map.of(now, ticketRequest.getDescription()));
 
         SupportTicketResponse payload = new SupportTicketResponse().createSupportTicketResponse(supportTicket);
-        kafkaTemplate.send("support-notification", payload);
+//        kafkaTemplate.send("support-notification", payload);
         log.info("Notification sent to kafka support {}", payload);
         supportTicketRepository.save(supportTicket);
         return payload;
@@ -49,7 +49,7 @@ public class SupportTicketService {
         }
 
         SupportTicketResponse payload = new SupportTicketResponse().createSupportTicketResponse(supportTicket);
-        kafkaTemplate.send("support-notification", payload);
+//        kafkaTemplate.send("support-notification", payload);
         return payload;
     }
 

@@ -1,4 +1,4 @@
-export type TicketStatus = 'OPEN' | 'RESOLVED';
+export type TicketStatus = 'OPEN' | 'RESOLVED' | 'PROCESSING';
 
 export interface SupportTicketRequest {
   title: string;

@@ -10,7 +10,7 @@ import {SupportTicketsComponent} from "./components/support/support-tickets/supp
 import {InfoComponent} from "./components/support/info/info.component";
 import {ReturnParcelComponent} from "./components/parcel/return-parcel/return-parcel.component";
 import {AdminDashboardComponent} from "./components/admin/admin-dashboard/admin-dashboard.component";
-
+import { AuthGuard } from './auth.guard';
 
 export const routes: Routes = [
   {path: '', component: HomeComponent},

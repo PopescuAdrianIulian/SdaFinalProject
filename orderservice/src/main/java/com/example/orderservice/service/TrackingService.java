@@ -37,6 +37,9 @@ public class TrackingService {
         statusHistory.put(LocalDateTime.now(), status);
         parcel.setStatusHistory(statusHistory);
         parcel.setStatus(status);
+        if(status.equals(PackageStatus.DELIVERED)){
+            parcel.setDelivered(true);
+        }
         parcel.setUpdatedAt(LocalDateTime.now());
         parcelRepository.saveAndFlush(parcel);
 
@@ -104,7 +107,7 @@ public class TrackingService {
     }
 
     private void sendNotification(ParcelResponse payload) {
-        kafkaTemplate.send(notificationTopic, payload);
+//        kafkaTemplate.send(notificationTopic, payload);
         log.info("Sending payload for the notification service {}", payload);
     }
 }

@@ -54,8 +54,7 @@ export class LoginComponent {
 
             switch (payload.type) {
               case 'ADMIN':
-                this.router.navigate(['/admin/dashboard']);
-                window.location.reload();
+                this.router.navigate(['/tickets']);
                 break;
               case 'USER':
                 this.router.navigate(['/home']);

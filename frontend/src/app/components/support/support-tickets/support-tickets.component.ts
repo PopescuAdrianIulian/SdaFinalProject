@@ -23,7 +23,7 @@ export class SupportTicketsComponent implements OnInit {
   currentUserEmail: string | null = '';
   selectedTicket: SupportTicketResponse | null = null;
   newMessage: string = '';
-  ticketStatuses: TicketStatus[] = ['OPEN', 'RESOLVED'];
+  ticketStatuses: TicketStatus[] = ['OPEN', 'RESOLVED', 'PROCESSING'];
 
   constructor(
     private router: Router,

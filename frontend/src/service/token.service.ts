@@ -95,4 +95,8 @@ export class TokenDecoderService {
     this.usernameSubject.next('');
     this.userIdSubject.next(null);
   }
+
+getToken(): string | null {
+  return this.tokenSubject.value || localStorage.getItem('jwt');
+}
 }
