@@ -88,7 +88,7 @@ h1 {
 }
 
 .message-bubble:hover {
-  background-color: #ff4f00; /* Darker yellow-orange on hover */
+  background-color: #ff4f00;
 }
 
 .message-timestamp {
@@ -124,7 +124,7 @@ h1 {
 }
 
 .chat-form button:hover {
-  background-color: #e65100; /* Darker orange on hover */
+  background-color: #e65100;
 }
 
 .chat-form button:disabled {

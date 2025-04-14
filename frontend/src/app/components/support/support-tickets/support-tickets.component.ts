@@ -24,6 +24,8 @@ export class SupportTicketsComponent implements OnInit {
   selectedTicket: SupportTicketResponse | null = null;
   newMessage: string = '';
   ticketStatuses: TicketStatus[] = ['OPEN', 'RESOLVED', 'PROCESSING'];
+  adminAssignedTickets: SupportTicketResponse[] = [];
+
 
   constructor(
     private router: Router,
@@ -40,10 +42,7 @@ export class SupportTicketsComponent implements OnInit {
     }
 
     if (this.currentUserRole === 'ADMIN') {
-      this.loadOpenTickets();
-      if (this.currentUserId !== null) {
-        this.loadMyTickets();
-      }
+      this.loadAdminTickets();
     }
 
     if (this.currentUserRole === 'USER') {
@@ -51,11 +50,23 @@ export class SupportTicketsComponent implements OnInit {
     }
   }
 
-  loadOpenTickets(): void {
+  loadAdminTickets(): void {
+    if (this.currentUserId == null) return;
+
     this.loadingOpen = true;
+
     this.supportTicketService.getOpenTickets().subscribe({
       next: (tickets) => {
         this.openTickets = tickets;
+      },
+      error: () => {
+        this.loadingOpen = false;
+      }
+    });
+
+    this.supportTicketService.getMyTickets(this.currentUserId).subscribe({
+      next: (tickets) => {
+        this.adminAssignedTickets = tickets;
         this.loadingOpen = false;
       },
       error: () => {
@@ -64,19 +75,8 @@ export class SupportTicketsComponent implements OnInit {
     });
   }
 
-  loadMyTickets(): void {
-    if (this.currentUserId === null) return;
+  loadUserTickets(): void {
 
-    this.loadingMine = true;
-    this.supportTicketService.getMyTickets(this.currentUserId).subscribe({
-      next: (tickets) => {
-        this.myTickets = tickets;
-        this.loadingMine = false;
-      },
-      error: () => {
-        this.loadingMine = false;
-      }
-    });
   }
 
   loadUserTicketsByEmail(): void {
@@ -125,7 +125,9 @@ export class SupportTicketsComponent implements OnInit {
   }
 
   updateTicketStatus(ticket: SupportTicketResponse, newStatus: TicketStatus): void {
-    this.supportTicketService.updateSupportTicketStatus(ticket.id, newStatus).subscribe({
+    if (this.currentUserId === null) return;
+
+    this.supportTicketService.updateSupportTicketStatus(ticket.id, newStatus, this.currentUserId).subscribe({
       next: () => {
         this.reloadSelectedTicket();
       }

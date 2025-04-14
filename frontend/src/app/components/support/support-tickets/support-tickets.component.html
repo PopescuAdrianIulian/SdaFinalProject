@@ -1,7 +1,6 @@
 <div class="tickets-wrapper">
   <h1>Support Tickets</h1>
 
-  <!-- ADMIN View -->
   <div *ngIf="isAdmin()">
     <div class="tickets-grid">
       <div class="ticket-section">
@@ -10,8 +9,13 @@
           <div class="spinner"></div>
           <p>Loading open tickets...</p>
         </div>
+
         <ng-container *ngIf="!loadingOpen && openTickets.length > 0; else noOpenTickets">
-          <div *ngFor="let ticket of openTickets" class="ticket-card" (click)="selectTicket(ticket)">
+          <div
+            *ngFor="let ticket of openTickets"
+            class="ticket-card"
+            (click)="selectTicket(ticket)"
+          >
             <h3>{{ ticket.title }}</h3>
             <p>{{ ticket.description }}</p>
             <div class="ticket-meta">
@@ -23,6 +27,31 @@
         <ng-template #noOpenTickets>
           <p class="empty-state">No open tickets available.</p>
         </ng-template>
+        <div class="ticket-section">
+          <h2>Your Assigned Tickets</h2>
+          <div *ngIf="loadingOpen" class="loading-indicator">
+            <div class="spinner"></div>
+            <p>Loading assigned tickets...</p>
+          </div>
+
+          <ng-container *ngIf="!loadingOpen && adminAssignedTickets.length > 0; else noAssignedTickets">
+            <div
+              *ngFor="let ticket of adminAssignedTickets"
+              class="ticket-card"
+              (click)="selectTicket(ticket)"
+            >
+              <h3>{{ ticket.title }}</h3>
+              <p>{{ ticket.description }}</p>
+              <div class="ticket-meta">
+                <span>Created: {{ formatDate(ticket.createdAt) }}</span>
+                <span>Email: {{ ticket.email }}</span>
+              </div>
+            </div>
+          </ng-container>
+          <ng-template #noAssignedTickets>
+            <p class="empty-state">No assigned tickets found.</p>
+          </ng-template>
+        </div>
       </div>
 
       <div class="ticket-section">
@@ -39,7 +68,11 @@
 
             <div class="status-update">
               <label for="ticket-status">Update Status:</label>
-              <select [(ngModel)]="selectedTicket.ticketStatus" (change)="updateTicketStatus(selectedTicket, selectedTicket.ticketStatus)" id="ticket-status">
+              <select
+                id="ticket-status"
+                [(ngModel)]="selectedTicket.ticketStatus"
+                (change)="updateTicketStatus(selectedTicket, selectedTicket.ticketStatus)"
+              >
                 <option *ngFor="let status of ticketStatuses" [value]="status">{{ status }}</option>
               </select>
             </div>
@@ -65,9 +98,14 @@
               </div>
 
               <div *ngIf="selectedTicket.ticketStatus !== 'RESOLVED'; else resolvedNotice">
-                <form (ngSubmit)="submitMessage()" #messageForm="ngForm" class="chat-form">
-                  <textarea [(ngModel)]="newMessage" name="message" required placeholder="Enter your message..."></textarea>
-                  <button type="submit" [disabled]="messageForm.invalid">Send Message</button>
+                <form (ngSubmit)="submitMessage()" #adminMessageForm="ngForm" class="chat-form">
+                  <textarea
+                    [(ngModel)]="newMessage"
+                    name="message"
+                    required
+                    placeholder="Enter your message..."
+                  ></textarea>
+                  <button type="submit" [disabled]="adminMessageForm.invalid">Send Message</button>
                 </form>
               </div>
               <ng-template #resolvedNotice>
@@ -76,9 +114,6 @@
             </div>
           </div>
         </ng-container>
-        <ng-template #noTicketSelected>
-          <p class="empty-state">Click on an open ticket to view details.</p>
-        </ng-template>
       </div>
     </div>
   </div>
@@ -91,8 +126,13 @@
           <div class="spinner"></div>
           <p>Loading your tickets...</p>
         </div>
+
         <ng-container *ngIf="!loadingMine && myTickets.length > 0; else noUserTickets">
-          <div *ngFor="let ticket of myTickets" class="ticket-card" (click)="selectTicket(ticket)">
+          <div
+            *ngFor="let ticket of myTickets"
+            class="ticket-card"
+            (click)="selectTicket(ticket)"
+          >
             <h3>{{ ticket.title }}</h3>
             <p>{{ ticket.description }}</p>
             <div class="ticket-meta">
@@ -133,22 +173,28 @@
                 </ng-container>
               </div>
 
-              <div *ngIf="selectedTicket.ticketStatus !== 'RESOLVED'; else resolvedNotice">
-                <form (ngSubmit)="submitMessage()" #messageForm="ngForm" class="chat-form">
-                  <textarea [(ngModel)]="newMessage" name="message" required placeholder="Enter your message..."></textarea>
-                  <button type="submit" [disabled]="messageForm.invalid">Send Message</button>
+              <div *ngIf="selectedTicket.ticketStatus !== 'RESOLVED'; else resolvedNoticeUser">
+                <form (ngSubmit)="submitMessage()" #userMessageForm="ngForm" class="chat-form">
+                  <textarea
+                    [(ngModel)]="newMessage"
+                    name="message"
+                    required
+                    placeholder="Enter your message..."
+                  ></textarea>
+                  <button type="submit" [disabled]="userMessageForm.invalid">Send Message</button>
                 </form>
               </div>
-              <ng-template #resolvedNotice>
+              <ng-template #resolvedNoticeUser>
                 <p class="resolved-warning">This ticket is resolved. You can't send messages anymore.</p>
               </ng-template>
             </div>
           </div>
         </ng-container>
-        <ng-template #noTicketSelected>
-          <p class="empty-state">Click on your ticket to view details.</p>
-        </ng-template>
       </div>
     </div>
   </div>
+
+  <ng-template #noTicketSelected>
+    <p class="empty-state">Click on a ticket to view details.</p>
+  </ng-template>
 </div>

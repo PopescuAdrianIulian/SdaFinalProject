@@ -26,6 +26,7 @@ public class SupportTicketResponse {
     private LocalDateTime createdAt;
 
     private TicketStatus ticketStatus;
+    private String assigneeEmail;
 
     private Map<LocalDateTime, TicketStatus> handlingHistory;
     private Map<LocalDateTime, String> messageHistory;

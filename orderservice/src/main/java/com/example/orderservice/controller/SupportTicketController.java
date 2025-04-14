@@ -23,10 +23,11 @@ public class SupportTicketController {
         return ResponseEntity.ok(supportTicketService.createSupportTicket(ticketRequest));
     }
 
-    @PostMapping("/{id}/{newStatus}")
+    @PostMapping("/{id}/{adminId}/{newStatus}")
     public ResponseEntity<SupportTicketResponse> updateSupportTicketStatus(@Valid @PathVariable Long id,
-                                                                           @PathVariable String newStatus) {
-        return ResponseEntity.ok(supportTicketService.updateSupportTicketStatus(id, newStatus));
+                                                                           @PathVariable String newStatus,
+                                                                           @PathVariable Long adminId) {
+        return ResponseEntity.ok(supportTicketService.updateSupportTicketStatus(id, newStatus,adminId));
     }
 
     @PostMapping("/message/{id}")
@@ -37,7 +38,7 @@ public class SupportTicketController {
     }
 
     @GetMapping("/myTickets/{id}")
-    public ResponseEntity<List<SupportTicketResponse>> getMyTickets(@Valid @PathVariable Long id) {
+    public ResponseEntity<List<SupportTicketResponse>> getMyAssignedTickets(@Valid @PathVariable Long id) {
         return ResponseEntity.ok(supportTicketService.getMyAssignedTickets(id));
     }
 

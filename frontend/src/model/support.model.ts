@@ -13,6 +13,7 @@ export interface SupportTicketResponse extends SupportTicketRequest {
   description: string;
   email: string;
   createdAt: string;
+  assigneeEmail:string;
   ticketStatus: TicketStatus;
   handlingHistory: Record<string, TicketStatus>;
   messageHistory: Record<string, string>;

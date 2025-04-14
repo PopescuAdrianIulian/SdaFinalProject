@@ -28,6 +28,9 @@ public class SupportTicketResponse {
 
     private TicketStatus ticketStatus;
 
+    private String assigneeEmail;
+
+
     private Map<LocalDateTime, TicketStatus> handlingHistory;
     private Map<LocalDateTime, String> messageHistory;
 
@@ -42,6 +45,7 @@ public class SupportTicketResponse {
                 .ticketStatus(supportTicket.getTicketStatus())
                 .handlingHistory(supportTicket.getHandlingHistory())
                 .messageHistory(supportTicket.getMessageHistory())
+                .assigneeEmail(supportTicket.getAssigneeEmail())
                 .build();
     }
 }

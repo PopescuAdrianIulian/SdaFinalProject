@@ -31,7 +31,7 @@ public class SupportTicket {
 
     private LocalDateTime createdAt;
 
-    private String assignee;
+    private String assigneeEmail;
 
     @Enumerated(EnumType.STRING)
     private TicketStatus ticketStatus;

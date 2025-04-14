@@ -16,8 +16,10 @@ export class SupportTicketService {
     return this.http.post<SupportTicketResponse>(`${this.apiUrl}/create`, ticketRequest);
   }
 
-  updateSupportTicketStatus(id: string, newStatus: TicketStatus): Observable<SupportTicketResponse> {
-    return this.http.post<SupportTicketResponse>(`${this.apiUrl}/${id}/${newStatus}`, {});
+
+
+  updateSupportTicketStatus(id: string, newStatus: TicketStatus,adminId:number): Observable<SupportTicketResponse> {
+    return this.http.post<SupportTicketResponse>(`${this.apiUrl}/${id}/${adminId}/${newStatus}`, {});
   }
 
   getOpenTickets(): Observable<SupportTicketResponse[]> {

@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 @Service
 @Slf4j
@@ -37,7 +36,7 @@ public class TrackingService {
         statusHistory.put(LocalDateTime.now(), status);
         parcel.setStatusHistory(statusHistory);
         parcel.setStatus(status);
-        if(status.equals(PackageStatus.DELIVERED)){
+        if (status.equals(PackageStatus.DELIVERED)){
             parcel.setDelivered(true);
         }
         parcel.setUpdatedAt(LocalDateTime.now());
@@ -107,7 +106,7 @@ public class TrackingService {
     }
 
     private void sendNotification(ParcelResponse payload) {
-//        kafkaTemplate.send(notificationTopic, payload);
+        kafkaTemplate.send(notificationTopic, payload);
         log.info("Sending payload for the notification service {}", payload);
     }
 }

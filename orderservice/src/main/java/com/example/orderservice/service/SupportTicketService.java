@@ -1,6 +1,7 @@
 package com.example.orderservice.service;
 
 import com.example.orderservice.entity.SupportTicket;
+import com.example.orderservice.entity.User;
 import com.example.orderservice.enums.TicketStatus;
 import com.example.orderservice.repository.SupportTicketRepository;
 import com.example.orderservice.repository.UserRepository;
@@ -33,25 +34,32 @@ public class SupportTicketService {
         supportTicket.setMessageHistory(Map.of(now, ticketRequest.getDescription()));
 
         SupportTicketResponse payload = new SupportTicketResponse().createSupportTicketResponse(supportTicket);
-//        kafkaTemplate.send("support-notification", payload);
+        kafkaTemplate.send("support-notification", payload);
         log.info("Notification sent to kafka support {}", payload);
         supportTicketRepository.save(supportTicket);
         return payload;
     }
 
-    public SupportTicketResponse updateSupportTicketStatus(Long id, String newStatus) {
+    public SupportTicketResponse updateSupportTicketStatus(Long id, String newStatus, Long adminId) {
         TicketStatus status = parseStatus(newStatus);
-        SupportTicket supportTicket = findTicketById(id);
 
+        User admin = userRepository.findById(adminId)
+                .orElseThrow(() -> new RuntimeException("Admin not found with ID: " + adminId));
+
+        SupportTicket supportTicket = findTicketById(id);
         if (!supportTicket.getTicketStatus().equals(TicketStatus.RESOLVED)) {
+            if (status == TicketStatus.PROCESSING) {
+                supportTicket.setAssigneeEmail(admin.getEmail());
+            }
             supportTicket.setTicketStatus(status);
             supportTicketRepository.saveAndFlush(supportTicket);
         }
-
         SupportTicketResponse payload = new SupportTicketResponse().createSupportTicketResponse(supportTicket);
-//        kafkaTemplate.send("support-notification", payload);
+        kafkaTemplate.send("support-notification", payload);
+
         return payload;
     }
+
 
     public List<SupportTicketResponse> getAllOpenTickets() {
         log.info("Retrieving open tickets");
@@ -68,15 +76,9 @@ public class SupportTicketService {
     public List<SupportTicketResponse> getMyAssignedTickets(Long userId) {
         String email = findUserEmailById(userId);
         log.info("Retrieving assigned tickets for user: {}", email);
-        return getFilteredTickets(ticket -> email.equals(ticket.getAssignee()));
+        return getFilteredTickets(ticket -> email.equals(ticket.getAssigneeEmail()));
     }
 
-    public List<SupportTicketResponse> getMyAssignedTicketsInProgress(Long userId) {
-        String email = findUserEmailById(userId);
-        log.info("Retrieving assigned and in-progress tickets for user: {}", email);
-        return getFilteredTickets(ticket ->
-                ticket.getTicketStatus() == TicketStatus.OPEN && email.equals(ticket.getAssignee()));
-    }
 
     public SupportTicketResponse findSupportTicketById(Long id) {
         return toResponse(findTicketById(id));
@@ -109,7 +111,7 @@ public class SupportTicketService {
 
     private List<SupportTicketResponse> getFilteredTickets(Predicate<SupportTicket> predicate) {
         return supportTicketRepository.findAll().stream()
-                .filter(predicate)
+                .filter(predicate.and(ticket -> ticket.getTicketStatus() != TicketStatus.RESOLVED))
                 .map(this::toResponse)
                 .collect(Collectors.toList());
     }
