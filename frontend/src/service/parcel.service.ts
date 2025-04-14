@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
-import {ParcelRequest, ParcelResponse} from "../model/parcel.model";
+import {ParcelRequest, ParcelResponse, ParcelStatsResponse} from "../model/parcel.model";
 
 @Injectable({
   providedIn: 'root'
@@ -28,5 +28,9 @@ export class ParcelService {
     return this.http.get(`${this.baseUrl}/label/${awb}`, {
       responseType: 'blob'
     });
+  }
+
+  getParcelStats(): Observable<ParcelStatsResponse> {
+    return this.http.get<ParcelStatsResponse>(`${this.baseUrl}/stats`);
   }
 }

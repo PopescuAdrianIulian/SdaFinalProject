@@ -29,3 +29,14 @@ export interface ParcelResponse {
   price: number;
   statusHistory: Record<string, PackageStatus>;
 }
+export interface ParcelStatsResponse {
+  totalParcels: number;
+  deliveredParcels: number;
+  inTransitParcels: number;
+  failedParcels: number;
+  successRate: number;
+  averageDeliveryTime: number;
+  averagePrice: number;
+  totalUsers: number;
+  totalRevenue: number;
+}

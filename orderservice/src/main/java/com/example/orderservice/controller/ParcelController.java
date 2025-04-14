@@ -2,6 +2,7 @@ package com.example.orderservice.controller;
 
 import com.example.orderservice.request.parcel.ParcelRequest;
 import com.example.orderservice.response.parcel.ParcelResponse;
+import com.example.orderservice.response.parcel.ParcelStatsResponse;
 import com.example.orderservice.service.ParcelLabelService;
 import com.example.orderservice.service.ParcelService;
 import jakarta.validation.Valid;
@@ -46,6 +47,11 @@ public class ParcelController {
                 .build());
 
         return new ResponseEntity<>(pdfBytes, headers, HttpStatus.OK);
+    }
+
+    @GetMapping("/stats")
+    public ResponseEntity<ParcelStatsResponse> getParcelStats() {
+        return ResponseEntity.ok(parcelService.getParcelStats());
     }
 
 

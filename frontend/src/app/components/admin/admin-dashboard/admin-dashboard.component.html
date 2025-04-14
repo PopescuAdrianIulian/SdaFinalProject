@@ -1,0 +1,51 @@
+<div class="parcel-stats-container">
+  <h2>Parcel Statistics</h2>
+
+  <div class="stat-cards">
+    <div class="stat-card">
+      <h3>Total Parcels</h3>
+      <p>{{ totalParcels }}</p>
+    </div>
+
+    <div class="stat-card">
+      <h3>Delivered Parcels</h3>
+      <p>{{ deliveredParcels }}</p>
+    </div>
+
+    <div class="stat-card">
+      <h3>In Transit Parcels</h3>
+      <p>{{ inTransitParcels }}</p>
+    </div>
+
+    <div class="stat-card">
+      <h3>Failed Parcels</h3>
+      <p>{{ failedParcels }}</p>
+    </div>
+
+    <div class="stat-card">
+      <h3>Total Users</h3>
+      <p>{{ totalUsers }}</p>
+    </div>
+  </div>
+
+  <div class="additional-stats">
+    <div>
+      <h3>Success Rate</h3>
+      <p>{{ successRate | percent }}</p>
+    </div>
+    <div>
+      <h3>Average Delivery Time</h3>
+      <p>{{ averageDeliveryTime }} hours</p>
+    </div>
+    <div>
+      <h3>Average Parcel Price</h3>
+      <p>{{ averagePrice | currency }}</p>
+    </div>
+
+    <div>
+      <h3>Total Revenue</h3>
+      <p>{{ totalRevenue | currency }}</p>
+    </div>
+
+  </div>
+</div>

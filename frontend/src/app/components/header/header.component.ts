@@ -87,4 +87,9 @@ export class HeaderComponent implements OnInit {
     this.router.navigate(['/tickets'])
 
   }
+
+  goToAdminDashboard() {
+    this.router.navigate(['/admin-dashboard'])
+
+  }
 }

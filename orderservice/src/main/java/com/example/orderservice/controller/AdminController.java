@@ -17,6 +17,7 @@ public class AdminController {
 
     private final UserService userService;
 
+
     @PostMapping("/create")
     public ResponseEntity<?> createNewAdmin(@Valid @RequestBody User user) {
         return ResponseEntity.ok(userService.createNewAccountAdmin(user));

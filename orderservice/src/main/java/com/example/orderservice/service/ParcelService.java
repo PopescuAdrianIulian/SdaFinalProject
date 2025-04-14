@@ -7,6 +7,7 @@ import com.example.orderservice.repository.ParcelRepository;
 import com.example.orderservice.repository.UserRepository;
 import com.example.orderservice.request.parcel.ParcelRequest;
 import com.example.orderservice.response.parcel.ParcelResponse;
+import com.example.orderservice.response.parcel.ParcelStatsResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -100,5 +101,33 @@ public class ParcelService {
         return parcelResponse.createParcelResponse(parcel);
     }
 
+
+    public ParcelStatsResponse getParcelStats() {
+        long total = parcelRepository.count();
+        long delivered = parcelRepository.countByStatus(PackageStatus.DELIVERED);
+        long inTransit = parcelRepository.countByStatus(PackageStatus.IN_TRANSIT);
+        long failed = parcelRepository.countByStatus(PackageStatus.CANCELED);
+        double averageDeliveryTime = parcelRepository.averageDeliveryTime();
+        Double averagePrice = parcelRepository.averageParcelPrice();
+        long totalUsers = userRepository.count();
+        double totalRevenue = parcelRepository.totalRevenue();
+
+
+        double successRate = total > 0 ? (double) delivered / total : 0;
+
+
+        ParcelStatsResponse response = new ParcelStatsResponse();
+        response.setTotalParcels(total);
+        response.setDeliveredParcels(delivered);
+        response.setInTransitParcels(inTransit);
+        response.setFailedParcels(failed);
+        response.setSuccessRate(successRate);
+        response.setAverageDeliveryTime(averageDeliveryTime);
+        response.setAveragePrice(averagePrice);
+        response.setTotalUsers(totalUsers);
+        response.setTotalRevenue(totalRevenue);
+
+        return response;
+    }
 
 }

@@ -38,7 +38,7 @@ public class User {
     private String address;
 
     @NotBlank(message = "Password cannot be empty")
-    @Pattern(regexp = "^(?=.*\\d)(?=.*[\\W_]).{8,}$")
+    @Pattern(regexp = "^(?=.*\\d).{8,}$")
     private String password;
 
     @Enumerated(EnumType.STRING)

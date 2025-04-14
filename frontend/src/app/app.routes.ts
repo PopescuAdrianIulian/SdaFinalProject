@@ -9,6 +9,7 @@ import {SupportComponent} from "./components/support/add-support-ticket/support.
 import {SupportTicketsComponent} from "./components/support/support-tickets/support-tickets.component";
 import {InfoComponent} from "./components/support/info/info.component";
 import {ReturnParcelComponent} from "./components/parcel/return-parcel/return-parcel.component";
+import {AdminDashboardComponent} from "./components/admin/admin-dashboard/admin-dashboard.component";
 
 
 export const routes: Routes = [
@@ -23,6 +24,7 @@ export const routes: Routes = [
   {path: 'tickets', component: SupportTicketsComponent},
   {path: 'info', component: InfoComponent},
   {path: 'returnParcel', component: ReturnParcelComponent},
+  {path: 'admin-dashboard', component: AdminDashboardComponent},
 
 
 ];

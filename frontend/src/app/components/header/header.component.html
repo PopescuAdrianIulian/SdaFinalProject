@@ -11,7 +11,7 @@
   <nav class="header-section nav" *ngIf="userType === 'ADMIN'">
     <button (click)="goToDashboard()">Courier Dashboard</button>
     <button (click)="goToProducts()">Support Tickets</button>
-    <button (click)="goToSystem()">System</button>
+    <button (click)="goToAdminDashboard()">Admin Dashboard</button>
   </nav>
 
   <nav class="header-section nav" *ngIf="userType === 'COURIER'">
