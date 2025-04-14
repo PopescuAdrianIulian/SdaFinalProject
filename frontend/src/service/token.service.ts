@@ -8,10 +8,12 @@ export class TokenDecoderService {
   private usernameSubject = new BehaviorSubject<string>('');
   private tokenSubject = new BehaviorSubject<string | null>(localStorage.getItem('jwt'));
   private userIdSubject = new BehaviorSubject<number | null>(null);
+  private userTypeSubject = new BehaviorSubject<string | null>(null);
 
   username$ = this.usernameSubject.asObservable();
   token$ = this.tokenSubject.asObservable();
   userId$ = this.userIdSubject.asObservable();
+  userType$ = this.userTypeSubject.asObservable();
 
   constructor() {
     const token = localStorage.getItem('jwt');
@@ -35,6 +37,7 @@ export class TokenDecoderService {
 
       const id = payload?.id ?? null;
       this.userIdSubject.next(id);
+      this.userTypeSubject.next(payload?.type || null);
     } catch (e) {
       console.error('Failed to decode token:', e);
       this.usernameSubject.next('');
@@ -94,6 +97,7 @@ export class TokenDecoderService {
     this.tokenSubject.next(null);
     this.usernameSubject.next('');
     this.userIdSubject.next(null);
+    this.userTypeSubject.next(null);
   }
 
 getToken(): string | null {

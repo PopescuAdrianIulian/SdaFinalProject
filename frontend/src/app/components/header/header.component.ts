@@ -26,6 +26,11 @@ export class HeaderComponent implements OnInit {
     this.tokenDecoder.username$.subscribe(name => {
       this.username = name;
       this.isLoggedIn = !!name;
+
+    });
+   this.tokenDecoder.userType$.subscribe((type: string | null) => {
+      this.userType = type;
+      console.log('Updated userType in header:', type);
     });
     const token = localStorage.getItem('jwt');
     if (token) {
