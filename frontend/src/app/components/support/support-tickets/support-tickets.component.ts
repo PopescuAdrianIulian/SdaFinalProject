@@ -57,7 +57,7 @@ export class SupportTicketsComponent implements OnInit {
 
     this.supportTicketService.getOpenTickets().subscribe({
       next: (tickets) => {
-        this.openTickets = tickets;
+        this.openTickets = tickets.filter(ticket => ticket.assigneeEmail  !== this.currentUserEmail);
       },
       error: () => {
         this.loadingOpen = false;
