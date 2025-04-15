@@ -30,7 +30,7 @@ export class ParcelDashboardComponent implements OnInit {
   loadParcels(): void {
     this.loading = true;
     this.error = '';
-    this.trackingService.getAllUndeliveredParcels().subscribe({
+    this.trackingService.getAllParcels().subscribe({
       next: (data) => {
         this.parcels = data;
         this.sortParcels();
