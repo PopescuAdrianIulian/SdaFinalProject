@@ -59,6 +59,13 @@ export class HeaderComponent implements OnInit {
       this.goToLogin();
     }
   }
+goToParcelDashboard() {
+    if (this.isLoggedIn) {
+      this.router.navigate(['/parcel-dashboard']);
+    } else {
+      this.goToLogin();
+    }
+  }
 
   goToSendParcel() {
     if (this.isLoggedIn) {

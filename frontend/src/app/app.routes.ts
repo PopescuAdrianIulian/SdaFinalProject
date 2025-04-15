@@ -9,6 +9,7 @@ import {SupportComponent} from "./components/support/add-support-ticket/support.
 import {SupportTicketsComponent} from "./components/support/support-tickets/support-tickets.component";
 import {InfoComponent} from "./components/support/info/info.component";
 import {ReturnParcelComponent} from "./components/parcel/return-parcel/return-parcel.component";
+import {ParcelDashboardComponent} from "./components/parcel/parcel-dashboard/parcel-dashboard.component";
 import {AdminDashboardComponent} from "./components/admin/admin-dashboard/admin-dashboard.component";
 import { AuthGuard } from './auth.guard';
 
@@ -51,6 +52,12 @@ export const routes: Routes = [
     canActivate: [AuthGuard],
     data: { expectedRole: 'ADMIN' }
   },
+{
+    path: 'parcel-dashboard',
+    component: ParcelDashboardComponent,
+    canActivate: [AuthGuard],
+    data: { expectedRole: 'ADMIN' }
+  }
 
 
 ];
